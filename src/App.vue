@@ -1,184 +1,255 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted, nextTick } from 'vue';
 
-// Dữ liệu CV - Edit trực tiếp tại đây
+// --- DATA SOURCE ---
 const personalInfo = ref({
-  name: "Trần Quang Lương", // [cite: 1]
-  role: "Full-Stack Developer Intern", // [cite: 2]
-  dob: "13/02/2005", // [cite: 9]
-  email: "tranquangluong06@gmail.com", // [cite: 10]
-  phone: "0907 987 126", // [cite: 11]
-  address: "Hóc Môn, TP. Hồ Chí Minh", // [cite: 13]
-  github: "github.com/LuongNuong131", // Lấy từ context của ông
-  avatar: "https://placehold.co/400x400/1e1e2f/FFF?text=LuNu" // Ảnh demo
+  name: "Trần Quang Lương",
+  role: "Full-Stack Developer",
+  email: "tranquangluong06@gmail.com",
+  phone: "0907 987 126",
+  address: "Hóc Môn, TP. Hồ Chí Minh",
+  github: "https://github.com/LuongNuong131",
+  avatar: "https://placehold.co/400x400/0f172a/00f2ff?text=LuNu", // Replace with your real photo
+  slogan: "Code with Passion, Build with Vision."
 });
 
-const careerGoals = ref([
-  { time: "Ngắn hạn (3-6 tháng)", title: "Internship", desc: "Áp dụng Vue.js, Node.js, MySQL vào thực tế. Hoàn thành 2-3 dự án, rèn luyện Git & CI/CD." }, // [cite: 3]
-  { time: "Trung hạn (1-2 năm)", title: "Full-Stack Dev", desc: "Thành thạo NestJS, GraphQL, Docker. Nâng cao tư duy thiết kế hệ thống." }, // [cite: 4]
-  { time: "Dài hạn (5 năm)", title: "Tech Lead / Architect", desc: "Đóng góp mã nguồn mở, kết nối cộng đồng dev và định hướng kiến trúc dự án." } // [cite: 5]
-]);
-
 const skills = ref({
-  frontend: ["Vue.js", "Bootstrap 5", "HTML5/CSS3", "JavaScript (ES6+)"], // [cite: 20]
-  backend: ["Node.js", "Express", "Java (Spring Boot)", "RESTful API"], // [cite: 21]
-  database: ["MySQL", "SQL Server"], // [cite: 22]
-  tools: ["Git/GitHub", "IntelliJ IDEA", "Postman", "Docker"]
+  frontend: [
+    { name: "Vue.js", icon: "fa-brands fa-vuejs", color: "#42b883" },
+    { name: "Bootstrap 5", icon: "fa-brands fa-bootstrap", color: "#7952b3" },
+    { name: "ReactJS", icon: "fa-brands fa-react", color: "#61dafb" }
+  ],
+  backend: [
+    { name: "Node.js", icon: "fa-brands fa-node", color: "#339933" },
+    { name: "Java Spring", icon: "fa-brands fa-java", color: "#f89820" },
+    { name: "C# .NET", icon: "fa-brands fa-microsoft", color: "#512bd4" }
+  ],
+  database: [
+    { name: "MySQL", icon: "fa-solid fa-database", color: "#00758f" },
+    { name: "SQL Server", icon: "fa-solid fa-server", color: "#cc2927" },
+    { name: "Docker", icon: "fa-brands fa-docker", color: "#2496ed" }
+  ]
 });
 
 const projects = ref([
   {
-    name: "EchoMMO (GameFi Project)",
-    role: "Full-Stack Developer",
+    id: 1,
+    name: "EchoMMO (GameFi)",
+    category: "Full-Stack / Game",
+    role: "Core Developer",
     time: "Development",
-    tech: ["Vue.js", "Spring Boot (Java 17)", "MySQL", "WebSocket"],
-    desc: "Dự án game nhập vai trực tuyến (MMO) tích hợp yếu tố tài chính. Xây dựng hệ thống backend xử lý giao dịch thời gian thực và frontend tương tác cao.",
+    tech: ["Vue.js", "Spring Boot", "MySQL", "WebSocket", "Docker"],
+    shortDesc: "Dự án Game nhập vai trực tuyến tích hợp tài chính (GameFi) với kiến trúc Microservices.",
+    fullDesc: "EchoMMO là dự án tâm huyết xây dựng một thế giới ảo nơi người chơi có thể tương tác thời gian thực. Hệ thống sử dụng VueJS cho trải nghiệm mượt mà, Spring Boot xử lý logic game phức tạp và WebSocket cho các tính năng PvP/Chat realtime.",
+    images: [
+      "https://placehold.co/800x450/1e293b/00f2ff?text=EchoMMO+Dashboard",
+      "https://placehold.co/800x450/1e293b/00f2ff?text=In-Game+UI",
+      "https://placehold.co/800x450/1e293b/00f2ff?text=Marketplace"
+    ],
+    link: "https://github.com/LuongNuong131/EchoMMO-Frontend",
     featured: true
   },
   {
-    name: "Dự án Ánh Dương",
-    role: "Leader, Frontend Dev", // [cite: 27]
-    time: "1/2025 - Nay", // [cite: 28]
-    tech: ["Vue.js", "Management"],
-    desc: "Quản lý lộ trình dự án, phân chia công việc team. Trực tiếp code module Frontend và viết báo cáo tiến độ." // [cite: 29]
+    id: 2,
+    name: "Hệ Thống Ánh Dương",
+    category: "Management System",
+    role: "Leader & Frontend",
+    time: "01/2025 - Present",
+    tech: ["Vue.js 3", "Pinia", "Axios", "Bootstrap"],
+    shortDesc: "Hệ thống quản lý nội bộ, phân chia công việc và theo dõi tiến độ dự án.",
+    fullDesc: "Đóng vai trò Leader, tôi chịu trách nhiệm thiết kế kiến trúc Frontend, review code và quản lý tiến độ của 5 thành viên. Hệ thống giúp tối ưu hóa quy trình làm việc giảm 30% thời gian họp hành.",
+    images: [
+      "https://placehold.co/800x450/2d3748/cbd5e0?text=Project+Tracking",
+      "https://placehold.co/800x450/2d3748/cbd5e0?text=Task+Management"
+    ],
+    link: "#",
+    featured: false
   },
   {
-    name: "Phần mềm Quản lý Bida",
-    role: "Leader, Dev", // [cite: 30]
-    time: "6/2024 - 7/2024", // [cite: 31]
-    tech: ["Java", "SQL Server"],
-    desc: "Xây dựng tool quản lý bàn, giờ chơi. Chịu trách nhiệm kiểm thử (Testing) và điều phối team." // [cite: 32]
+    id: 3,
+    name: "Quản Lý Bida Pro",
+    category: "Desktop App",
+    role: "Full-Stack",
+    time: "06/2024",
+    tech: ["Java Swing", "JDBC", "MySQL"],
+    shortDesc: "Phần mềm quản lý bàn, tính tiền giờ và kho hàng cho quán Bida.",
+    fullDesc: "Giải quyết bài toán tính tiền giờ phức tạp (khung giờ vàng, phụ thu). Tích hợp báo cáo doanh thu ngày/tháng và quản lý kho đồ uống.",
+    images: [
+      "https://placehold.co/800x450/4a5568/a0aec0?text=Table+Map",
+      "https://placehold.co/800x450/4a5568/a0aec0?text=Billing+System"
+    ],
+    link: "#",
+    featured: false
   },
   {
-    name: "Phần mềm Quản lý Nhà Trọ",
-    role: "Leader, Dev", // [cite: 33]
-    time: "4/2024 - 5/2024", // [cite: 34]
-    tech: ["C++", "SQL Server"],
-    desc: "Hệ thống quản lý phòng trọ, điện nước. Phân tích nghiệp vụ và thiết kế cơ sở dữ liệu." // [cite: 35]
+    id: 4,
+    name: "LuNu House Manager",
+    category: "Desktop App",
+    role: "Leader",
+    time: "04/2024",
+    tech: ["C# WinForms", "SQL Server", "Entity Framework"],
+    shortDesc: "Ứng dụng quản lý trọ, tính điện nước và xuất hóa đơn tự động.",
+    fullDesc: "Phần mềm giúp chủ trọ quản lý 50+ phòng. Tính năng nổi bật: Tự động tính tiền điện nước theo chỉ số cũ/mới, xuất hóa đơn PDF và gửi mail cho người thuê.",
+    images: [
+      "https://placehold.co/800x450/4a5568/a0aec0?text=Room+List",
+      "https://placehold.co/800x450/4a5568/a0aec0?text=Invoice+Export"
+    ],
+    link: "#",
+    featured: false
   }
 ]);
 
-const education = ref([
-  { school: "FPT Polytechnic", major: "Phát triển phần mềm", time: "09/2023 - Nay" }, // [cite: 24, 25]
-  { school: "Chứng chỉ Tiếng Anh", major: "PET (2018) & KET (2016)", time: "Cambridge" } // [cite: 41, 42]
-]);
+// --- LOGIC ---
+const selectedProject = ref(null);
+let modalInstance = null;
+
+const openModal = (project) => {
+  selectedProject.value = project;
+  // Wait for DOM update then show modal
+  nextTick(() => {
+    const modalEl = document.getElementById('projectModal');
+    if (modalEl) {
+      modalInstance = new bootstrap.Modal(modalEl);
+      modalInstance.show();
+    }
+  });
+};
+
+// Typing Effect Text
+const typingText = ref("");
+const fullText = "Full-Stack Developer | Tech Enthusiast";
+let i = 0;
+
+const typeWriter = () => {
+  if (i < fullText.length) {
+    typingText.value += fullText.charAt(i);
+    i++;
+    setTimeout(typeWriter, 50);
+  }
+};
+
+onMounted(() => {
+  typeWriter();
+});
 </script>
 
 <template>
-  <div class="cv-container">
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top shadow-sm">
+  <div class="app-container">
+    <div class="bg-shape shape-1"></div>
+    <div class="bg-shape shape-2"></div>
+
+    <nav class="navbar navbar-expand-lg fixed-top glass-nav">
       <div class="container">
-        <a class="navbar-brand fw-bold text-info" href="#">
-          <i class="fa-solid fa-code me-2"></i>LuNu<span class="text-white">Portfolio</span>
+        <a class="navbar-brand fw-bold text-gradient" href="#">
+          &lt;LuNu /&gt;
         </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-          <span class="navbar-toggler-icon"></span>
+        <button class="navbar-toggler text-white" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+          <i class="fa-solid fa-bars"></i>
         </button>
         <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-          <ul class="navbar-nav">
-            <li class="nav-item"><a class="nav-link" href="#about">Giới thiệu</a></li>
-            <li class="nav-item"><a class="nav-link" href="#skills">Kỹ năng</a></li>
-            <li class="nav-item"><a class="nav-link" href="#projects">Dự án</a></li>
-            <li class="nav-item"><a class="nav-link btn btn-info text-dark ms-2 fw-bold" href="tel:0907987126">Liên hệ ngay</a></li>
+          <ul class="navbar-nav align-items-center gap-3">
+            <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
+            <li class="nav-item"><a class="nav-link" href="#skills">Skills</a></li>
+            <li class="nav-item"><a class="nav-link" href="#projects">Projects</a></li>
+            <li class="nav-item">
+              <a :href="'tel:' + personalInfo.phone" class="btn btn-glow">Let's Talk</a>
+            </li>
           </ul>
         </div>
       </div>
     </nav>
 
-    <header class="hero-section d-flex align-items-center text-center text-white" id="about">
+    <header id="about" class="hero-section d-flex align-items-center">
       <div class="container">
-        <div class="row justify-content-center">
-          <div class="col-md-8">
-            <img :src="personalInfo.avatar" alt="Avatar" class="rounded-circle border border-4 border-info mb-4 shadow-lg avatar-img">
-            <h1 class="display-4 fw-bold mb-2">{{ personalInfo.name }}</h1>
-            <h3 class="text-info mb-4">{{ personalInfo.role }}</h3>
-            <p class="lead text-light opacity-75 mb-4">
-              Sinh viên Software Engineering tại FPT Polytechnic. Đam mê xây dựng các ứng dụng Web Full-Stack và Game Development.
+        <div class="row align-items-center flex-column-reverse flex-lg-row">
+          <div class="col-lg-7 text-center text-lg-start animate__animated animate__fadeInLeft">
+            <div class="badge-custom mb-3"><i class="fa-solid fa-code me-2"></i>Hello, World!</div>
+            <h1 class="display-3 fw-black text-white mb-2">
+              I'm <span class="text-gradient">{{ personalInfo.name }}</span>
+            </h1>
+            <h3 class="typing-text mb-4">{{ typingText }}<span class="cursor">|</span></h3>
+            <p class="lead text-light opacity-75 mb-5 w-75 mx-auto mx-lg-0">
+              {{ personalInfo.slogan }} <br>
+              Chuyên xây dựng các ứng dụng Web & Game với hiệu suất cao và trải nghiệm người dùng tuyệt vời.
             </p>
-            <div class="d-flex justify-content-center gap-3">
-              <a :href="'mailto:' + personalInfo.email" class="btn btn-outline-light"><i class="fa-solid fa-envelope me-2"></i>Email</a>
-              <a href="#" class="btn btn-outline-light"><i class="fa-brands fa-github me-2"></i>GitHub</a>
+            <div class="d-flex gap-3 justify-content-center justify-content-lg-start">
+              <a :href="personalInfo.github" target="_blank" class="social-btn"><i class="fa-brands fa-github"></i></a>
+              <a href="#" class="social-btn"><i class="fa-brands fa-linkedin"></i></a>
+              <a :href="'mailto:' + personalInfo.email" class="social-btn"><i class="fa-solid fa-envelope"></i></a>
+            </div>
+          </div>
+          <div class="col-lg-5 text-center mb-5 mb-lg-0 animate__animated animate__fadeInRight">
+            <div class="avatar-wrapper">
+              <img :src="personalInfo.avatar" alt="Avatar" class="avatar-img">
+              <div class="floating-card glass-card">
+                <i class="fa-solid fa-check-circle text-success"></i> Open for Work
+              </div>
             </div>
           </div>
         </div>
       </div>
     </header>
 
-    <section class="section py-5 bg-light">
+    <section id="skills" class="section py-5">
       <div class="container">
-        <h2 class="section-title text-center mb-5"><i class="fa-solid fa-bullseye text-info me-2"></i>Mục Tiêu Nghề Nghiệp</h2>
-        <div class="row">
-          <div class="col-md-4 mb-4" v-for="(goal, index) in careerGoals" :key="index">
-            <div class="card h-100 border-0 shadow-sm hover-card">
-              <div class="card-body text-center">
-                <div class="badge bg-info p-2 mb-3 rounded-pill">{{ goal.time }}</div>
-                <h5 class="card-title fw-bold">{{ goal.title }}</h5>
-                <p class="card-text text-muted small">{{ goal.desc }}</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="section py-5" id="skills">
-      <div class="container">
-        <h2 class="section-title text-center mb-5"><i class="fa-solid fa-layer-group text-info me-2"></i>Kỹ Năng Chuyên Môn</h2>
-        <div class="row">
-          <div class="col-md-4 mb-4">
-            <div class="skill-box p-4 border rounded bg-white shadow-sm h-100">
-              <h4 class="text-primary mb-3"><i class="fa-brands fa-vuejs me-2"></i>Frontend</h4>
-              <ul class="list-unstyled">
-                <li v-for="skill in skills.frontend" :key="skill" class="mb-2 border-bottom pb-2">
-                  <i class="fa-solid fa-check text-success me-2"></i>{{ skill }}
-                </li>
-              </ul>
-            </div>
-          </div>
-          <div class="col-md-4 mb-4">
-            <div class="skill-box p-4 border rounded bg-white shadow-sm h-100">
-              <h4 class="text-success mb-3"><i class="fa-brands fa-node me-2"></i>Backend</h4>
-              <ul class="list-unstyled">
-                <li v-for="skill in skills.backend" :key="skill" class="mb-2 border-bottom pb-2">
-                  <i class="fa-solid fa-check text-success me-2"></i>{{ skill }}
-                </li>
-              </ul>
-            </div>
-          </div>
-          <div class="col-md-4 mb-4">
-            <div class="skill-box p-4 border rounded bg-white shadow-sm h-100">
-              <h4 class="text-warning mb-3"><i class="fa-solid fa-database me-2"></i>DB & Tools</h4>
-              <ul class="list-unstyled">
-                <li v-for="skill in skills.database" :key="skill" class="mb-2 border-bottom pb-2">
-                  <i class="fa-solid fa-check text-success me-2"></i>{{ skill }}
-                </li>
-                 <li v-for="skill in skills.tools" :key="skill" class="mb-2 border-bottom pb-2">
-                  <i class="fa-solid fa-check text-success me-2"></i>{{ skill }}
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="section py-5 bg-light" id="projects">
-      <div class="container">
-        <h2 class="section-title text-center mb-5"><i class="fa-solid fa-laptop-code text-info me-2"></i>Dự Án Nổi Bật</h2>
+        <h2 class="section-heading text-center mb-5 animate__animated animate__fadeInUp">
+          Tech Stack
+        </h2>
         <div class="row g-4">
-          <div class="col-lg-6" v-for="(project, index) in projects" :key="index">
-            <div class="card project-card h-100 border-0 shadow" :class="{ 'featured-project': project.featured }">
-              <div class="card-body">
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                  <h5 class="card-title fw-bold mb-0">
-                    <span v-if="project.featured">⭐ </span>{{ project.name }}
-                  </h5>
-                  <span class="badge bg-secondary">{{ project.time }}</span>
+          <div class="col-md-4" v-for="(group, key) in skills" :key="key">
+            <div class="glass-card h-100 p-4 animate-hover">
+              <h4 class="text-capitalize mb-4 text-white border-bottom pb-2 border-secondary">
+                {{ key }}
+              </h4>
+              <div class="d-flex flex-wrap gap-2">
+                <span v-for="item in group" :key="item.name" class="skill-tag" :style="{ borderColor: item.color }">
+                  <i :class="item.icon" :style="{ color: item.color }"></i> {{ item.name }}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="projects" class="section py-5">
+      <div class="container">
+        <h2 class="section-heading text-center mb-5">Featured Projects</h2>
+        <div class="row g-4">
+          <div class="col-12" v-if="projects.find(p => p.featured)">
+            <div class="glass-card p-0 overflow-hidden featured-card d-flex flex-wrap flex-lg-nowrap" 
+                 @click="openModal(projects.find(p => p.featured))">
+              <div class="img-col col-lg-6">
+                <img :src="projects.find(p => p.featured).images[0]" class="w-100 h-100 object-fit-cover" alt="Featured">
+                <div class="overlay"><i class="fa-solid fa-expand"></i> View Details</div>
+              </div>
+              <div class="content-col col-lg-6 p-4 p-lg-5 d-flex flex-column justify-content-center">
+                <div class="badge bg-warning text-dark align-self-start mb-2">⭐ Spotlight</div>
+                <h3 class="fw-bold text-white mb-3">{{ projects.find(p => p.featured).name }}</h3>
+                <p class="text-light opacity-75 mb-4">{{ projects.find(p => p.featured).shortDesc }}</p>
+                <div class="mb-4">
+                  <span v-for="tech in projects.find(p => p.featured).tech" :key="tech" class="tech-badge me-2 mb-2">{{ tech }}</span>
                 </div>
-                <h6 class="text-info small mb-3">{{ project.role }}</h6>
-                <p class="card-text text-secondary">{{ project.desc }}</p>
-                <div class="mt-3">
-                  <span v-for="tech in project.tech" :key="tech" class="badge bg-light text-dark border me-1">{{ tech }}</span>
+                <button class="btn btn-outline-info w-auto align-self-start">Explore Project <i class="fa-solid fa-arrow-right ms-2"></i></button>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-6 col-lg-4" v-for="project in projects.filter(p => !p.featured)" :key="project.id">
+            <div class="glass-card project-card h-100 d-flex flex-column" @click="openModal(project)">
+              <div class="card-img-top position-relative">
+                <img :src="project.images[0]" class="w-100 rounded-top" alt="Project">
+                <div class="category-badge">{{ project.category }}</div>
+              </div>
+              <div class="card-body p-4 flex-grow-1">
+                <h5 class="fw-bold text-white mb-2">{{ project.name }}</h5>
+                <p class="text-light opacity-50 small mb-3">{{ project.role }} | {{ project.time }}</p>
+                <p class="text-light opacity-75 line-clamp-3">{{ project.shortDesc }}</p>
+              </div>
+              <div class="card-footer p-4 border-0 pt-0">
+                <div class="d-flex flex-wrap gap-1">
+                  <span v-for="tech in project.tech.slice(0, 3)" :key="tech" class="tech-mini-badge">{{ tech }}</span>
+                  <span v-if="project.tech.length > 3" class="tech-mini-badge">+{{ project.tech.length - 3 }}</span>
                 </div>
               </div>
             </div>
@@ -187,82 +258,189 @@ const education = ref([
       </div>
     </section>
 
-    <footer class="bg-dark text-white py-5 mt-auto">
-      <div class="container">
-        <div class="row">
-          <div class="col-md-6 mb-4">
-            <h5 class="text-info mb-3">Học Vấn & Chứng Chỉ</h5>
-            <ul class="list-unstyled opacity-75">
-              <li v-for="edu in education" :key="edu.school" class="mb-2">
-                <strong>{{ edu.school }}:</strong> {{ edu.major }} ({{ edu.time }})
-              </li>
-            </ul>
+    <footer class="text-center py-4 text-white opacity-50">
+      <small>&copy; 2026 {{ personalInfo.name }}. Built with Vue 3 & Passion.</small>
+    </footer>
+
+    <div class="modal fade" id="projectModal" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content glass-modal border-0" v-if="selectedProject">
+          <div class="modal-header border-bottom border-secondary">
+            <div>
+              <h4 class="modal-title fw-bold text-white">{{ selectedProject.name }}</h4>
+              <p class="mb-0 text-info small">{{ selectedProject.category }}</p>
+            </div>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
-          <div class="col-md-6 mb-4 text-md-end">
-            <h5 class="text-info mb-3">Liên Hệ</h5>
-            <p class="mb-1"><i class="fa-solid fa-location-dot me-2"></i>{{ personalInfo.address }}</p>
-            <p class="mb-1"><i class="fa-solid fa-phone me-2"></i>{{ personalInfo.phone }}</p>
-            <p class="mb-0"><i class="fa-solid fa-envelope me-2"></i>{{ personalInfo.email }}</p>
+          <div class="modal-body p-0">
+            <div class="row g-0">
+              <div class="col-lg-8 bg-dark">
+                <div :id="'carousel-' + selectedProject.id" class="carousel slide" data-bs-ride="carousel">
+                  <div class="carousel-inner">
+                    <div class="carousel-item" v-for="(img, index) in selectedProject.images" :key="index" :class="{ active: index === 0 }">
+                      <img :src="img" class="d-block w-100" style="height: 500px; object-fit: cover;" alt="Project Image">
+                    </div>
+                  </div>
+                  <button class="carousel-control-prev" type="button" :data-bs-target="'#carousel-' + selectedProject.id" data-bs-slide="prev" v-if="selectedProject.images.length > 1">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                  </button>
+                  <button class="carousel-control-next" type="button" :data-bs-target="'#carousel-' + selectedProject.id" data-bs-slide="next" v-if="selectedProject.images.length > 1">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                  </button>
+                </div>
+              </div>
+              
+              <div class="col-lg-4 p-4 p-lg-5 text-white">
+                <h5 class="text-info mb-3">📝 Overview</h5>
+                <p class="opacity-75">{{ selectedProject.fullDesc }}</p>
+                
+                <h5 class="text-info mb-3 mt-4">🛠 Tech Stack</h5>
+                <div class="d-flex flex-wrap gap-2 mb-4">
+                  <span v-for="tech in selectedProject.tech" :key="tech" class="badge bg-dark border border-secondary">{{ tech }}</span>
+                </div>
+
+                <h5 class="text-info mb-3">👨‍💻 My Role</h5>
+                <p class="opacity-75">{{ selectedProject.role }}</p>
+
+                <div class="mt-5 d-grid gap-2">
+                  <a :href="selectedProject.link" target="_blank" class="btn btn-primary btn-lg fw-bold">
+                    <i class="fa-brands fa-github me-2"></i> View Repository
+                  </a>
+                  <button class="btn btn-outline-light" data-bs-dismiss="modal">Close</button>
+                </div>
+              </div>
+            </div>
           </div>
-        </div>
-        <hr class="border-secondary">
-        <div class="text-center opacity-50 small">
-          &copy; 2026 {{ personalInfo.name }}. Designed by LuNu AI.
         </div>
       </div>
-    </footer>
+    </div>
+
   </div>
 </template>
 
 <style>
-/* CSS Reset & Custom Styles */
+/* GLOBAL STYLES */
+:root {
+  --primary: #00f2ff;
+  --secondary: #7000ff;
+  --dark-bg: #0f172a;
+  --card-bg: rgba(30, 41, 59, 0.7);
+  --glass: rgba(255, 255, 255, 0.05);
+  --border: rgba(255, 255, 255, 0.1);
+}
+
 body {
-  font-family: 'Inter', sans-serif;
-  background-color: #f8f9fa;
+  font-family: 'Outfit', sans-serif;
+  background-color: var(--dark-bg);
+  color: #fff;
+  overflow-x: hidden;
 }
 
-.hero-section {
-  background: linear-gradient(135deg, #1e1e2f 0%, #2a2a40 100%);
-  padding-top: 100px;
-  padding-bottom: 80px;
+/* Background Shapes */
+.bg-shape {
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(100px);
+  z-index: -1;
+  animation: float 10s infinite alternate;
+}
+.shape-1 { width: 400px; height: 400px; background: var(--secondary); top: -100px; left: -100px; opacity: 0.2; }
+.shape-2 { width: 500px; height: 500px; background: var(--primary); bottom: -100px; right: -100px; opacity: 0.15; animation-delay: 2s; }
+
+@keyframes float {
+  0% { transform: translate(0, 0); }
+  100% { transform: translate(30px, 50px); }
 }
 
-.avatar-img {
-  width: 150px;
-  height: 150px;
-  object-fit: cover;
-  transition: transform 0.3s;
+/* Navbar */
+.glass-nav {
+  background: rgba(15, 23, 42, 0.8);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--border);
+  padding: 15px 0;
+}
+.nav-link { color: #ccc !important; font-weight: 500; transition: 0.3s; }
+.nav-link:hover, .nav-link.active { color: var(--primary) !important; }
+
+/* Text Gradient */
+.text-gradient {
+  background: linear-gradient(45deg, var(--primary), var(--secondary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
-.avatar-img:hover {
-  transform: scale(1.05);
+/* Buttons */
+.btn-glow {
+  background: transparent;
+  border: 1px solid var(--primary);
+  color: var(--primary);
+  box-shadow: 0 0 10px rgba(0, 242, 255, 0.2);
+  transition: 0.3s;
+}
+.btn-glow:hover {
+  background: var(--primary);
+  color: #000;
+  box-shadow: 0 0 20px rgba(0, 242, 255, 0.6);
 }
 
-.section-title {
-  font-weight: 700;
-  color: #333;
-  position: relative;
-  display: inline-block;
-}
+/* Hero Section */
+.hero-section { min-height: 100vh; padding-top: 80px; }
+.avatar-wrapper { position: relative; display: inline-block; }
+.avatar-img { width: 350px; height: 350px; border-radius: 30px; object-fit: cover; border: 2px solid var(--border); box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
+.floating-card { position: absolute; bottom: 30px; right: -20px; padding: 10px 20px; border-radius: 15px; font-weight: 600; font-size: 0.9rem; animation: float 3s infinite ease-in-out; }
 
-.hover-card {
-  transition: transform 0.2s ease-in-out;
+/* Typing Cursor */
+.cursor { animation: blink 1s infinite; margin-left: 5px; color: var(--primary); }
+@keyframes blink { 50% { opacity: 0; } }
+
+/* Glass Cards */
+.glass-card {
+  background: var(--card-bg);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  transition: all 0.3s ease;
+  cursor: pointer;
 }
-.hover-card:hover {
+.glass-card:hover {
   transform: translateY(-5px);
+  border-color: var(--primary);
+  box-shadow: 0 10px 30px rgba(0, 242, 255, 0.1);
 }
 
-.project-card {
-  transition: all 0.3s;
-  overflow: hidden;
-}
-.project-card:hover {
-  box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
+/* Skill Tags */
+.skill-tag {
+  background: rgba(255,255,255,0.05);
+  padding: 8px 12px;
+  border-radius: 8px;
+  border-left: 3px solid;
+  font-size: 0.9rem;
 }
 
-/* Highlight Featured Project (EchoMMO) */
-.featured-project {
-  border-left: 5px solid #0dcaf0 !important;
-  background: linear-gradient(to right, #ffffff, #f0fbff);
+/* Projects */
+.featured-card { cursor: pointer; }
+.featured-card .img-col { position: relative; overflow: hidden; }
+.featured-card .overlay {
+  position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.6); display: flex; align-items: center; justify-content: center;
+  opacity: 0; transition: 0.3s; font-weight: bold; font-size: 1.2rem;
+}
+.featured-card:hover .overlay { opacity: 1; }
+.featured-card img { transition: 0.5s; }
+.featured-card:hover img { transform: scale(1.1); }
+
+.tech-badge { background: rgba(0, 242, 255, 0.1); color: var(--primary); padding: 5px 12px; border-radius: 20px; font-size: 0.85rem; font-weight: 600; }
+.tech-mini-badge { font-size: 0.75rem; background: rgba(255,255,255,0.1); padding: 2px 8px; border-radius: 4px; color: #ccc; }
+.category-badge { position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.8); color: #fff; padding: 4px 10px; border-radius: 6px; font-size: 0.8rem; font-weight: 600; }
+
+/* Modal */
+.glass-modal { background: #1a202c; color: white; border: 1px solid var(--border); }
+.line-clamp-3 { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+
+/* Responsive */
+@media (max-width: 992px) {
+  .hero-section { text-align: center; padding-top: 100px; }
+  .avatar-img { width: 250px; height: 250px; margin-bottom: 30px; }
+  .display-3 { font-size: 2.5rem; }
 }
 </style>

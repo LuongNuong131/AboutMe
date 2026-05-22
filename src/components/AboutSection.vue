@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted } from "vue";
+import { onMounted, nextTick } from "vue";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
 
@@ -26,87 +26,136 @@ const advancedTools = [
 ];
 
 onMounted(() => {
-  gsap.from(".about-heading", {
-    scrollTrigger: { trigger: "#about", start: "top 75%" },
-    y: 80,
-    opacity: 0,
-    duration: 1.2,
-    ease: "power4.out",
-  });
+  nextTick(() => {
+    // Đảm bảo DOM đã dựng xong hoàn toàn mới tính toán tọa độ cuộn chuột
+    setTimeout(() => {
+      // Khởi tạo các diễn hoạt mượt mà
+      gsap.from(".about-heading", {
+        scrollTrigger: {
+          trigger: "#about",
+          start: "top 85%",
+          toggleActions: "play none none none",
+        },
+        y: 50,
+        opacity: 0,
+        duration: 1,
+        ease: "power3.out",
+      });
 
-  gsap.from(".about-card", {
-    scrollTrigger: { trigger: ".about-grid", start: "top 80%" },
-    y: 60,
-    opacity: 0,
-    duration: 0.9,
-    stagger: 0.15,
-    ease: "power3.out",
-  });
+      gsap.from(".stat-block", {
+        scrollTrigger: {
+          trigger: ".stats-row",
+          start: "top 90%",
+          toggleActions: "play none none none",
+        },
+        y: 40,
+        opacity: 0,
+        scale: 0.95,
+        duration: 0.6,
+        stagger: 0.08,
+        ease: "back.out(1.4)",
+      });
 
-  gsap.from(".stat-block", {
-    scrollTrigger: { trigger: ".stats-row", start: "top 85%" },
-    y: 40,
-    opacity: 0,
-    scale: 0.9,
-    duration: 0.7,
-    stagger: 0.1,
-    ease: "back.out(1.7)",
-  });
+      gsap.from(".about-card", {
+        scrollTrigger: {
+          trigger: ".about-grid",
+          start: "top 90%",
+          toggleActions: "play none none none",
+        },
+        y: 45,
+        opacity: 0,
+        duration: 0.8,
+        stagger: 0.12,
+        ease: "power2.out",
+      });
 
-  gsap.from(".tool-tag", {
-    scrollTrigger: { trigger: ".tools-grid", start: "top 85%" },
-    y: 20,
-    opacity: 0,
-    duration: 0.5,
-    stagger: 0.06,
-    ease: "power2.out",
-  });
+      // Vòng chạy Marquee chữ chuyển động liên tục
+      gsap.to(".marquee-track", {
+        xPercent: -50,
+        ease: "none",
+        duration: 25,
+        repeat: -1,
+      });
 
-  gsap.to(".marquee-track", {
-    xPercent: -50,
-    ease: "none",
-    duration: 22,
-    repeat: -1,
+      // Ép ScrollTrigger tính toán lại toàn bộ vị trí để loại bỏ lỗi khoảng trắng
+      ScrollTrigger.refresh();
+    }, 200);
   });
 });
 </script>
 
 <template>
-  <section id="about" class="pt-32 md:pt-48 relative z-10 overflow-hidden">
-    <div class="px-8 md:px-14 mb-20 about-heading">
-      <div class="flex items-end justify-between">
-        <h2
-          class="text-[10vw] md:text-[6vw] font-heading font-extrabold text-dark dark:text-white leading-[1.1] tracking-tighter uppercase"
-        >
-          Tư Duy<br />Hệ Thống.
-        </h2>
-        <div class="hidden md:block text-right mb-2">
+  <section
+    id="about"
+    class="pt-24 md:pt-32 relative z-10 overflow-hidden bg-background dark:bg-slate-950 transition-colors duration-700"
+  >
+    <div
+      class="absolute inset-0 z-0 pointer-events-none opacity-[0.015] dark:opacity-[0.03]"
+      style="
+        background-image:
+          linear-gradient(rgba(99, 102, 241, 1) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(99, 102, 241, 1) 1px, transparent 1px);
+        background-size: 40px 40px;
+      "
+    ></div>
+
+    <div
+      class="absolute top-0 left-14 bottom-0 w-px bg-gray-200/50 dark:bg-slate-800/40 pointer-events-none hidden md:block"
+    ></div>
+    <div
+      class="absolute top-0 right-14 bottom-0 w-px bg-gray-200/50 dark:bg-slate-800/40 pointer-events-none hidden md:block"
+    ></div>
+
+    <div class="px-8 md:px-14 mb-12 about-heading relative z-10">
+      <div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
+        <div class="relative">
           <div
-            class="font-mono text-xs text-muted uppercase tracking-widest mb-1"
+            class="font-mono text-[9px] text-indigo-500 uppercase tracking-[0.25em] mb-3 flex items-center gap-2 select-none"
           >
-            // About me
+            <span
+              class="w-1.5 h-1.5 rounded-full bg-indigo-500 animate-ping"
+            ></span>
+            <span>[SYS_SECTOR_02_ACTIVE] // COORD_13.01</span>
           </div>
-          <div class="text-sm font-medium text-dark dark:text-slate-300">
-            HCMC, Vietnam
+          <h2
+            class="text-[9vw] md:text-[5.5vw] font-heading font-extrabold text-dark dark:text-white leading-[1.05] tracking-tighter uppercase"
+          >
+            Tư Duy<br />Hệ Thống.
+          </h2>
+        </div>
+
+        <div class="text-left md:text-right font-mono select-none opacity-80">
+          <div
+            class="text-[10px] text-muted dark:text-slate-400 uppercase tracking-widest mb-1"
+          >
+            // SYSTEM DATA LOG
+          </div>
+          <div class="text-xs font-bold text-dark dark:text-indigo-400">
+            LOC: HCMC_VN // LATENCY: 0ms
+          </div>
+          <div
+            class="mt-2 text-gray-300 dark:text-slate-700 font-barcode text-xl tracking-normal hidden md:block"
+          >
+            ||||| | |||| || ||| ||| | ||
           </div>
         </div>
       </div>
     </div>
 
-    <div class="px-8 md:px-14 mb-16 stats-row">
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+    <div class="px-8 md:px-14 mb-12 stats-row relative z-10">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
         <div
           v-for="stat in stats"
           :key="stat.value"
-          class="stat-block group p-6 rounded-2xl border border-gray-200 dark:border-slate-800 bg-white/80 dark:bg-slate-900/60 backdrop-blur-sm hover:border-indigo-300 dark:hover:border-indigo-700 hover:shadow-lg hover:shadow-indigo-500/5 transition-all duration-400"
+          class="stat-block group p-6 rounded-2xl border border-gray-100 dark:border-slate-800/80 bg-white/70 dark:bg-slate-900/40 backdrop-blur-md hover:border-indigo-300 dark:hover:border-indigo-500/50 hover:shadow-[0_15px_30px_-10px_rgba(99,102,241,0.1)] transition-all duration-300"
         >
           <div
-            class="text-4xl md:text-5xl font-display font-extrabold text-dark dark:text-white tracking-tight group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors"
+            class="text-3xl md:text-4xl font-display font-bold text-dark dark:text-white tracking-tight group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors"
           >
             {{ stat.value }}
           </div>
           <div
-            class="text-xs font-mono text-muted uppercase tracking-widest mt-2"
+            class="text-[10px] font-mono text-muted dark:text-slate-400 uppercase tracking-widest mt-1.5"
           >
             {{ stat.label }}
           </div>
@@ -115,115 +164,125 @@ onMounted(() => {
     </div>
 
     <div
-      class="about-grid px-8 md:px-14 mb-0 grid grid-cols-1 md:grid-cols-12 gap-6"
+      class="about-grid px-8 md:px-14 grid grid-cols-1 md:grid-cols-12 gap-6 relative z-10"
     >
       <div
-        class="about-card col-span-1 md:col-span-4 p-8 rounded-3xl border border-gray-200 dark:border-slate-800 bg-white/90 dark:bg-slate-900/70 backdrop-blur-sm hover:shadow-xl hover:shadow-indigo-500/5 transition-all duration-500 relative overflow-hidden"
+        class="about-card col-span-1 md:col-span-4 p-7 rounded-3xl border border-gray-100 dark:border-slate-800/80 bg-white/80 dark:bg-slate-900/50 backdrop-blur-md hover:shadow-xl hover:shadow-indigo-500/5 transition-all duration-300 relative overflow-hidden"
       >
         <div
-          class="absolute top-0 right-0 w-32 h-32 rounded-bl-full opacity-[0.06]"
+          class="absolute top-0 right-0 w-24 h-24 rounded-bl-full opacity-[0.05]"
           style="background: radial-gradient(circle, #6366f1, transparent)"
         ></div>
         <span
-          class="block font-mono text-[10px] uppercase tracking-widest text-indigo-500 mb-8"
+          class="block font-mono text-[9px] uppercase tracking-widest text-indigo-500 mb-6 font-bold"
         >
-          // Hồ Sơ Engineer
+          // BẢNG THÔNG TIN CÁ NHÂN
         </span>
-        <ul class="space-y-4 text-sm font-sans">
+        <ul class="space-y-3.5 text-xs font-sans">
           <li
-            class="flex justify-between items-center pb-3 border-b border-gray-100 dark:border-slate-800"
+            class="flex justify-between items-center pb-2.5 border-b border-gray-100 dark:border-slate-800/60"
           >
-            <span class="text-muted font-medium">Tên</span>
-            <span class="font-bold text-dark dark:text-white text-right"
+            <span class="text-muted dark:text-slate-400 font-medium"
+              >Kỹ sư</span
+            >
+            <span class="font-bold text-dark dark:text-white"
               >Trần Quang Lương</span
             >
           </li>
           <li
-            class="flex justify-between items-center pb-3 border-b border-gray-100 dark:border-slate-800"
+            class="flex justify-between items-center pb-2.5 border-b border-gray-100 dark:border-slate-800/60"
           >
-            <span class="text-muted font-medium">Ngày sinh</span>
-            <span
-              class="font-bold text-dark dark:text-white text-right font-mono"
+            <span class="text-muted dark:text-slate-400 font-medium"
+              >Ngày sinh</span
+            >
+            <span class="font-bold text-dark dark:text-white font-mono"
               >13.01.2005</span
             >
           </li>
           <li
-            class="flex justify-between items-center pb-3 border-b border-gray-100 dark:border-slate-800"
+            class="flex justify-between items-center pb-2.5 border-b border-gray-100 dark:border-slate-800/60"
           >
-            <span class="text-muted font-medium">Khu vực</span>
-            <span class="font-bold text-dark dark:text-white text-right"
-              >Hóc Môn, TP.HCM</span
+            <span class="text-muted dark:text-slate-400 font-medium"
+              >Khu vực hoạt động</span
+            >
+            <span class="font-bold text-dark dark:text-white"
+              >Hóc Môn / Quận 12, HCM</span
             >
           </li>
           <li
-            class="flex flex-col justify-between items-start pb-3 border-b border-gray-100 dark:border-slate-800 gap-2"
+            class="flex flex-col pb-2.5 border-b border-gray-100 dark:border-slate-800/60 gap-1.5"
           >
-            <span class="text-muted font-medium">Đam mê & Sở thích</span>
-            <span
-              class="font-bold text-indigo-600 dark:text-indigo-400 text-right w-full text-xs leading-relaxed"
+            <span class="text-muted dark:text-slate-400 font-medium"
+              >Sở thích chuyên môn</span
             >
-              G-Funk Rap / GameFi & MMORPG / SMC Crypto Trading
+            <span
+              class="font-bold text-indigo-600 dark:text-indigo-400 text-[11px] leading-relaxed"
+            >
+              Python Automation / GameFi MMORPG / SMC Crypto Trading / G-Funk
+              Rap
             </span>
           </li>
           <li class="flex justify-between items-center pt-1">
-            <span class="text-muted font-medium">Status</span>
+            <span class="text-muted dark:text-slate-400 font-medium"
+              >Trạng thái cổng mạng</span
+            >
             <span
-              class="flex items-center gap-2 font-bold text-emerald-600 dark:text-emerald-400"
+              class="flex items-center gap-1.5 font-bold text-emerald-600 dark:text-emerald-400 font-mono text-[11px]"
             >
               <span
-                class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"
+                class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"
               ></span>
-              Open to work
+              OPEN_TO_WORK
             </span>
           </li>
         </ul>
       </div>
 
       <div
-        class="about-card col-span-1 md:col-span-5 p-8 rounded-3xl border border-indigo-200/60 dark:border-indigo-800/40 bg-gradient-to-br from-indigo-50/80 to-white dark:from-indigo-900/20 dark:to-slate-900/70 backdrop-blur-sm hover:shadow-xl hover:shadow-indigo-500/10 transition-all duration-500 flex flex-col justify-center relative overflow-hidden"
+        class="about-card col-span-1 md:col-span-5 p-7 rounded-3xl border border-indigo-100 dark:border-indigo-950 bg-gradient-to-br from-indigo-50/40 to-white dark:from-indigo-950/10 dark:to-slate-900/50 backdrop-blur-md hover:shadow-xl hover:shadow-indigo-500/5 transition-all duration-300 flex flex-col justify-center relative overflow-hidden"
       >
         <div
-          class="absolute -bottom-8 -right-8 w-40 h-40 rounded-full opacity-[0.08]"
+          class="absolute -bottom-6 -right-6 w-32 h-32 rounded-full opacity-[0.05]"
           style="background: radial-gradient(circle, #6366f1, transparent)"
         ></div>
         <span
-          class="block font-mono text-[10px] uppercase tracking-widest text-indigo-500 mb-6"
+          class="block font-mono text-[9px] uppercase tracking-widest text-indigo-500 mb-4 font-bold"
         >
-          // Mục tiêu nghề nghiệp
+          // ĐỊNH HƯỚNG PHÁT TRIỂN
         </span>
         <h3
-          class="text-2xl md:text-3xl font-display font-extrabold tracking-tight text-dark dark:text-white mb-6 leading-tight uppercase"
+          class="text-xl md:text-2xl font-display font-bold tracking-tight text-dark dark:text-white mb-4 leading-tight uppercase"
         >
           Kiến trúc vững chắc,<br />
           <span class="text-indigo-600 dark:text-indigo-400"
-            >tương lai mở rộng.</span
+            >Hệ thống tối ưu toàn diện.</span
           >
         </h3>
         <p
-          class="text-sm text-muted dark:text-slate-400 font-medium leading-loose relative z-10"
+          class="text-xs md:text-sm text-muted dark:text-slate-400 font-medium leading-relaxed font-sans"
         >
-          Là Cử nhân chuyên ngành Phát triển phần mềm tại FPT Polytechnic, tôi
-          sở hữu nền tảng vững chãi về hệ thống Core Backend, thuật toán, và cấu
-          trúc xử lý GameFi. Cùng với kỹ năng khai thác tự động hóa (Python
-          Automation), tôi luôn hướng tới các giải pháp quản trị vận hành toàn
-          trình hiệu suất cao.
+          Là sinh viên chuyên ngành Phát triển phần mềm tại FPT Polytechnic, tôi
+          tập trung chuyên sâu vào giải pháp Core Backend, xử lý giải thuật
+          logic GameFi và khai thác tự động hóa (Python Automation). Định hướng
+          thiết lập các kiến trúc hạ tầng phần mềm phân tán, có tính chịu tải
+          cao và tối ưu hóa tài nguyên vận hành toàn trình.
         </p>
       </div>
 
       <div
-        class="about-card col-span-1 md:col-span-3 p-8 rounded-3xl border border-gray-200 dark:border-slate-800 bg-white/90 dark:bg-slate-900/70 backdrop-blur-sm transition-all duration-500 relative overflow-hidden"
+        class="about-card col-span-1 md:col-span-3 p-7 rounded-3xl border border-gray-100 dark:border-slate-800/80 bg-white/80 dark:bg-slate-900/50 backdrop-blur-md transition-all duration-300 relative overflow-hidden"
       >
         <span
-          class="block font-mono text-[10px] uppercase tracking-widest text-indigo-500 mb-6"
+          class="block font-mono text-[9px] uppercase tracking-widest text-indigo-500 mb-5 font-bold"
         >
-          // Vũ Khí Kỹ Thuật
+          // VŨ KHÍ KHAI THÁC
         </span>
-        <div class="tools-grid flex flex-wrap gap-2.5">
+        <div class="tools-grid flex flex-wrap gap-2">
           <span
             v-for="(tool, i) in advancedTools"
             :key="tool"
-            class="tool-tag floating-tag neon-hover px-3 py-2 border border-gray-200 dark:border-slate-700 bg-gray-50/80 dark:bg-slate-800/60 rounded-xl text-xs font-semibold font-mono text-dark dark:text-slate-300 transition-all duration-300 cursor-default relative overflow-hidden"
-            :style="{ animationDelay: `${i * 0.2}s` }"
+            class="tool-tag floating-tag neon-hover px-2.5 py-1.5 border border-gray-200/60 dark:border-slate-800 bg-gray-50/50 dark:bg-slate-900/40 rounded-xl text-[10px] font-bold font-mono text-dark dark:text-slate-300 transition-all duration-300 cursor-none relative overflow-hidden select-none"
+            :style="{ animationDelay: `${i * 0.15}s` }"
           >
             {{ tool }}
           </span>
@@ -232,40 +291,35 @@ onMounted(() => {
     </div>
 
     <div
-      class="overflow-hidden whitespace-nowrap py-7 md:py-10 mt-16 bg-dark dark:bg-indigo-950 text-white select-none relative"
-      style="
-        border-top: 1px solid rgba(255, 255, 255, 0.05);
-        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-      "
+      class="overflow-hidden whitespace-nowrap py-5 md:py-7 mt-16 bg-dark dark:bg-indigo-950 text-white select-none relative z-10 border-t border-b border-white/5"
+      style="will-change: transform"
     >
       <div
-        class="absolute left-0 top-0 bottom-0 w-20 z-10 pointer-events-none"
-        style="background: linear-gradient(to right, #0f172a, transparent)"
+        class="absolute left-0 top-0 bottom-0 w-16 z-10 pointer-events-none bg-gradient-to-r from-background to-transparent opacity-20"
       ></div>
       <div
-        class="absolute right-0 top-0 bottom-0 w-20 z-10 pointer-events-none"
-        style="background: linear-gradient(to left, #0f172a, transparent)"
+        class="absolute right-0 top-0 bottom-0 w-16 z-10 pointer-events-none bg-gradient-to-l from-background to-transparent opacity-20"
       ></div>
       <div
-        class="marquee-track flex text-[5.5vw] md:text-[3.5vw] font-display font-extrabold uppercase tracking-widest"
+        class="marquee-track flex text-[4.5vw] md:text-[2.8vw] font-display font-extrabold uppercase tracking-widest"
       >
-        <span class="opacity-90">&nbsp;OPTIMIZED BACKEND&nbsp;</span
-        ><span class="text-indigo-400">✦</span>
-        <span class="opacity-90">&nbsp;HIGH LOAD ARCHITECTURE&nbsp;</span
-        ><span class="text-indigo-400">✦</span>
-        <span class="opacity-90">&nbsp;PYTHON AUTOMATION&nbsp;</span
-        ><span class="text-indigo-400">✦</span>
-        <span class="opacity-90">&nbsp;SCALABLE SYSTEMS&nbsp;</span
-        ><span class="text-indigo-400">✦</span>
-        <span class="opacity-90">&nbsp;OPTIMIZED BACKEND&nbsp;</span
-        ><span class="text-indigo-400">✦</span>
-        <span class="opacity-90">&nbsp;HIGH LOAD ARCHITECTURE&nbsp;</span
-        ><span class="text-indigo-400">✦</span>
-        <span class="opacity-90">&nbsp;PYTHON AUTOMATION&nbsp;</span
-        ><span class="text-indigo-400">✦</span>
-        <span class="opacity-90">&nbsp;SCALABLE SYSTEMS&nbsp;</span
-        ><span class="text-indigo-400">✦</span>
+        <span>&nbsp;OPTIMIZED BACKEND ARCHITECTURE&nbsp;✦&nbsp;</span>
+        <span>&nbsp;PYTHON AUTOMATION EXPERT&nbsp;✦&nbsp;</span>
+        <span>&nbsp;HIGH LOAD SYSTEM DESIGN&nbsp;✦&nbsp;</span>
+        <span>&nbsp;FULL-STACK DEPLOYMENT&nbsp;✦&nbsp;</span>
+        <span>&nbsp;OPTIMIZED BACKEND ARCHITECTURE&nbsp;✦&nbsp;</span>
+        <span>&nbsp;PYTHON AUTOMATION EXPERT&nbsp;✦&nbsp;</span>
+        <span>&nbsp;HIGH LOAD SYSTEM DESIGN&nbsp;✦&nbsp;</span>
+        <span>&nbsp;FULL-STACK DEPLOYMENT&nbsp;✦&nbsp;</span>
       </div>
     </div>
   </section>
 </template>
+
+<style scoped>
+/* Đồng bộ cấu trúc chữ Barcode cho HUD hệ thống */
+@import url("https://fonts.googleapis.com/css2?family=Libre+Barcode+128&display=swap");
+.font-barcode {
+  font-family: "Libre Barcode 128", cubic-bezier(0.1, 0.7, 0.1, 1);
+}
+</style>

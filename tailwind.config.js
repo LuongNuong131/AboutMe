@@ -5,15 +5,15 @@ export default {
   theme: {
     extend: {
       colors: {
-        background: "#F8FAFC" /* Off-white mượt hơn */,
+        background: "#F8FAFC",
         surface: "#FFFFFF",
         border: "#E2E8F0",
         muted: "#64748B",
-        dark: "#0F172A" /* Slate 900 - Dịu mắt hơn đen thuần */,
+        dark: "#0F172A",
       },
       fontFamily: {
-        sans: ['"Plus Jakarta Sans"', "sans-serif"],
-        display: ['"Syne"', "sans-serif"],
+        sans: ['"Inter"', "sans-serif"],
+        display: ['"Inter"', "sans-serif"],
         mono: ["JetBrains Mono", "monospace"],
       },
       animation: {

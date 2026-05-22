@@ -180,13 +180,11 @@ onBeforeUnmount(() => {
     ref="heroRef"
     class="relative min-h-screen flex flex-col justify-center overflow-hidden"
   >
-    <!-- Particle canvas -->
     <canvas
       ref="canvasRef"
       class="absolute inset-0 z-0 pointer-events-none opacity-60"
     ></canvas>
 
-    <!-- Gradient Orbs -->
     <div class="pointer-events-none absolute inset-0 z-0 overflow-hidden">
       <div
         class="orb-1 absolute top-[-15%] left-[-10%] w-[55vw] h-[55vw] rounded-full blur-[130px]"
@@ -220,7 +218,6 @@ onBeforeUnmount(() => {
       ></div>
     </div>
 
-    <!-- Grid pattern overlay -->
     <div
       class="absolute inset-0 z-0 pointer-events-none opacity-[0.025] dark:opacity-[0.04]"
       style="
@@ -231,7 +228,6 @@ onBeforeUnmount(() => {
       "
     ></div>
 
-    <!-- Topbar -->
     <div
       class="absolute top-0 left-0 right-0 z-20 px-8 md:px-14 py-6 flex justify-between items-center"
     >
@@ -287,12 +283,10 @@ onBeforeUnmount(() => {
       </div>
     </div>
 
-    <!-- Main content -->
     <div
       class="relative z-10 px-8 md:px-14 flex flex-col md:flex-row md:items-center md:gap-16 pt-28 pb-24 max-w-7xl mx-auto w-full"
     >
       <div class="flex-1 min-w-0">
-        <!-- Eyebrow -->
         <div class="eyebrow-el flex items-center gap-3 mb-10">
           <div
             class="flex items-center gap-2 px-4 py-2 rounded-full border border-indigo-200 dark:border-indigo-800 bg-indigo-50/80 dark:bg-indigo-900/20 backdrop-blur-sm"
@@ -313,7 +307,6 @@ onBeforeUnmount(() => {
           </div>
         </div>
 
-        <!-- Headline -->
         <div class="headline-wrap mb-14 select-none">
           <div class="overflow-hidden flex">
             <span
@@ -324,22 +317,17 @@ onBeforeUnmount(() => {
               >{{ char }}</span
             >
           </div>
-          <div class="overflow-hidden flex flex-wrap mt-2">
+          <div class="overflow-hidden flex mt-2">
             <span
               v-for="(char, i) in splitChars('ARCHITECT')"
               :key="'a' + i"
-              class="char-a inline-block font-display font-extrabold leading-[0.95] tracking-[-0.02em] cursor-default dark:text-white/10"
-              style="
-                font-size: clamp(3.5rem, 7.5vw, 8rem);
-                -webkit-text-stroke: 1.5px currentColor;
-                color: transparent;
-              "
+              class="char-a inline-block font-display font-extrabold leading-[0.95] tracking-[-0.02em] cursor-default text-dark dark:text-white"
+              style="font-size: clamp(3.5rem, 7.5vw, 8rem)"
               >{{ char }}</span
             >
           </div>
         </div>
 
-        <!-- Description -->
         <div class="hero-meta flex items-start gap-5 mb-12">
           <div
             class="w-px h-16 shrink-0 mt-1"
@@ -352,7 +340,6 @@ onBeforeUnmount(() => {
           </p>
         </div>
 
-        <!-- CTAs -->
         <div class="hero-meta flex items-center gap-4 flex-wrap mb-14">
           <a
             href="#projects"
@@ -373,7 +360,6 @@ onBeforeUnmount(() => {
           </a>
         </div>
 
-        <!-- Stats row -->
         <div class="flex items-center gap-8 flex-wrap">
           <div class="stat-item text-center">
             <div
@@ -416,7 +402,6 @@ onBeforeUnmount(() => {
         </div>
       </div>
 
-      <!-- Right: Avatar card -->
       <div
         class="hero-right shrink-0 w-full md:w-[260px] lg:w-[300px] flex flex-col gap-4 mt-16 md:mt-0"
       >
@@ -434,7 +419,6 @@ onBeforeUnmount(() => {
             class="absolute inset-0 bg-gradient-to-t from-slate-900/95 via-slate-900/20 to-transparent"
           ></div>
 
-          <!-- Inner glow border -->
           <div
             class="absolute inset-0 rounded-[2.5rem] pointer-events-none"
             style="box-shadow: inset 0 0 40px rgba(99, 102, 241, 0.15)"
@@ -464,7 +448,6 @@ onBeforeUnmount(() => {
           </div>
         </div>
 
-        <!-- Tech badges floating -->
         <div class="flex gap-2 flex-wrap justify-center">
           <span
             v-for="tech in ['Vue 3', 'FastAPI', 'Spring Boot', 'MySQL']"
@@ -476,7 +459,6 @@ onBeforeUnmount(() => {
       </div>
     </div>
 
-    <!-- Bottom bar -->
     <div
       class="scroll-hint absolute bottom-0 left-0 right-0 z-10 px-8 md:px-14 py-5 flex justify-between items-center border-t border-gray-200/40 dark:border-slate-800/60 backdrop-blur-sm bg-white/20 dark:bg-slate-950/20"
     >

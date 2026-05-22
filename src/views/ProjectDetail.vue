@@ -4,12 +4,14 @@ import { projects } from "../data/projects";
 import { computed, onMounted, ref } from "vue";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
+import { useI18n } from "vue-i18n";
 
 gsap.registerPlugin(ScrollTrigger);
 
 const route = useRoute();
 const router = useRouter();
 const parallaxImg = ref(null);
+const { locale } = useI18n();
 
 const project = computed(() => projects.find((p) => p.id === route.params.id));
 
@@ -97,9 +99,9 @@ onMounted(() => {
               class="text-muted block mb-2 text-xs font-mono uppercase tracking-widest font-bold"
               >// Vai trò cốt lõi</span
             >
-            <span class="text-dark font-bold text-base leading-snug block">{{
-              project.role
-            }}</span>
+            <span class="text-dark font-bold text-base leading-snug block">
+              {{ project.role[locale] || project.role }}
+            </span>
           </div>
           <div class="md:col-span-2">
             <span

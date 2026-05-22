@@ -8,8 +8,8 @@ gsap.registerPlugin(ScrollTrigger);
 
 const stats = [
   { value: "3+", label: "Năm học tập" },
-  { value: "4", label: "Dự án thực chiến" },
-  { value: "8+", label: "Công nghệ" },
+  { value: "6", label: "Dự án thực chiến" },
+  { value: "12+", label: "Công nghệ" },
   { value: "3.0", label: "GPA" },
 ];
 
@@ -62,7 +62,6 @@ onMounted(() => {
 
 <template>
   <section id="about" class="pt-32 md:pt-48 relative z-10 overflow-hidden">
-    <!-- Section heading -->
     <div class="px-8 md:px-14 mb-20 about-heading">
       <div class="flex items-end justify-between">
         <h2
@@ -83,7 +82,6 @@ onMounted(() => {
       </div>
     </div>
 
-    <!-- Stats row -->
     <div class="px-8 md:px-14 mb-16 stats-row">
       <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
         <div
@@ -105,15 +103,12 @@ onMounted(() => {
       </div>
     </div>
 
-    <!-- Main grid -->
     <div
       class="about-grid px-8 md:px-14 mb-0 grid grid-cols-1 md:grid-cols-12 gap-6"
     >
-      <!-- Profile card -->
       <div
         class="about-card col-span-1 md:col-span-4 p-8 rounded-3xl border border-gray-200 dark:border-slate-800 bg-white/90 dark:bg-slate-900/70 backdrop-blur-sm hover:shadow-xl hover:shadow-indigo-500/5 transition-all duration-500 relative overflow-hidden"
       >
-        <!-- Decorative gradient top-right -->
         <div
           class="absolute top-0 right-0 w-32 h-32 rounded-bl-full opacity-[0.06]"
           style="background: radial-gradient(circle, #6366f1, transparent)"
@@ -138,7 +133,7 @@ onMounted(() => {
           >
             <span class="text-muted font-medium">Chuyên môn</span>
             <span class="font-bold text-dark dark:text-white text-right"
-              >Full-Stack Dev</span
+              >Full-Stack Dev Intern</span
             >
           </li>
           <li
@@ -163,7 +158,6 @@ onMounted(() => {
         </ul>
       </div>
 
-      <!-- Philosophy card -->
       <div
         class="about-card col-span-1 md:col-span-5 p-8 rounded-3xl border border-indigo-200/60 dark:border-indigo-800/40 bg-gradient-to-br from-indigo-50/80 to-white dark:from-indigo-900/20 dark:to-slate-900/70 backdrop-blur-sm hover:shadow-xl hover:shadow-indigo-500/10 transition-all duration-500 flex flex-col justify-center relative overflow-hidden"
       >
@@ -175,7 +169,7 @@ onMounted(() => {
         <span
           class="block font-mono text-[10px] uppercase tracking-widest text-indigo-500 mb-6"
         >
-          // Philosophy
+          // Mục tiêu nghề nghiệp
         </span>
         <h3
           class="text-2xl md:text-3xl font-display font-extrabold tracking-tight text-dark dark:text-white mb-6 leading-tight uppercase"
@@ -186,15 +180,16 @@ onMounted(() => {
           >
         </h3>
         <p
-          class="text-base text-muted dark:text-slate-400 font-medium leading-loose relative z-10"
+          class="text-sm text-muted dark:text-slate-400 font-medium leading-loose relative z-10"
         >
-          Hệ thống không chỉ là tập hợp các dòng Code, mà là sự phối hợp chặt
-          chẽ giữa logic và hạ tầng. Tôi tập trung vào tối ưu Database, thiết kế
-          API chuẩn, và xây dựng Backend đáp ứng nhu cầu thực tế.
+          Là Cử nhân chuyên ngành Phát triển phần mềm tại FPT Polytechnic với
+          điểm số GPA 3.0, sở hữu nền tảng kỹ thuật tốt về hệ thống Core Backend
+          vững chãi kết hợp tư duy xử lý logic game, quản trị vận hành toàn
+          trình từ khâu thiết kế dữ liệu đến triển khai sản phẩm thực tế, cam
+          kết mang lại giá trị bền vững.
         </p>
       </div>
 
-      <!-- Tools card -->
       <div
         class="about-card col-span-1 md:col-span-3 p-8 rounded-3xl border border-gray-200 dark:border-slate-800 bg-white/90 dark:bg-slate-900/70 backdrop-blur-sm hover:shadow-xl hover:shadow-indigo-500/5 transition-all duration-500 relative overflow-hidden"
       >
@@ -215,7 +210,6 @@ onMounted(() => {
       </div>
     </div>
 
-    <!-- Marquee banner -->
     <div
       class="overflow-hidden whitespace-nowrap py-7 md:py-10 mt-16 bg-dark dark:bg-indigo-950 text-white select-none relative"
       style="
@@ -223,7 +217,6 @@ onMounted(() => {
         border-bottom: 1px solid rgba(255, 255, 255, 0.05);
       "
     >
-      <!-- Gradient fade edges -->
       <div
         class="absolute left-0 top-0 bottom-0 w-20 z-10 pointer-events-none"
         style="background: linear-gradient(to right, #0f172a, transparent)"

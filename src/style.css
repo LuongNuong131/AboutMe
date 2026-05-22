@@ -1,0 +1,23 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    /* Mặc định xài font Syne sạch sẽ */
+    @apply font-sans;
+  }
+
+  /* Cấu hình Tailwind override default sans */
+  @apply font-sans {
+    font-family: "Syne", sans-serif !important;
+  }
+}
+
+@layer utilities {
+  /* Class chuyên dụng cho tiêu đề khổng lồ rỗng viền */
+  .font-display {
+    font-family: "Cabinet Grotesk", sans-serif;
+    font-weight: 800;
+  }
+}

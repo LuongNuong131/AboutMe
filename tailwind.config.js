@@ -6,12 +6,14 @@ export default {
       colors: {
         background: "#FAFAFA",
         surface: "#FFFFFF",
-        border: "#F3F4F6", // gray-100
-        muted: "#6B7280", // gray-500
-        dark: "#111827", // gray-900
+        border: "#F3F4F6",
+        muted: "#6B7280",
+        dark: "#111827",
       },
       fontFamily: {
-        sans: ["Space Grotesk", "sans-serif"],
+        /* Phân bổ rõ ràng font tiêu đề và font body */
+        sans: ['"Plus Jakarta Sans"', "sans-serif"],
+        display: ['"Syne"', "sans-serif"],
         mono: ["JetBrains Mono", "monospace"],
       },
       animation: {

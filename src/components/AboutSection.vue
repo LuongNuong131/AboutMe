@@ -2,13 +2,11 @@
 import { onMounted } from "vue";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
-// FIX: Nhập dữ liệu công cụ
 import { toolsStack } from "../data/tools";
 
 gsap.registerPlugin(ScrollTrigger);
 
 onMounted(() => {
-  // Hiệu ứng chữ trượt lên (Fade-up)
   gsap.from(".editorial-reveal", {
     scrollTrigger: { trigger: "#about", start: "top 80%" },
     y: 50,
@@ -18,11 +16,10 @@ onMounted(() => {
     ease: "power3.out",
   });
 
-  // Hiệu ứng Marquee (Chữ chạy vô tận)
   gsap.to(".marquee-content", {
     xPercent: -50,
     ease: "none",
-    duration: 20, // Tăng thời gian để chạy mượt hơn
+    duration: 25,
     repeat: -1,
   });
 });
@@ -32,14 +29,14 @@ onMounted(() => {
   <section id="about" class="pt-32 md:pt-48 bg-background relative z-10">
     <div class="px-6 md:px-12 mb-16 md:mb-24 editorial-reveal">
       <h2
-        class="text-[10vw] md:text-[7vw] font-display font-extrabold text-dark leading-[0.9] tracking-tighter uppercase"
+        class="text-[10vw] md:text-[7vw] font-display font-extrabold text-dark leading-[0.9] tracking-tight uppercase"
       >
         Tư Duy <br />Hệ Thống.
       </h2>
     </div>
 
     <div
-      class="grid grid-cols-1 md:grid-cols-12 border-y border-dark divide-y md:divide-y-0 md:divide-x divide-dark editorial-reveal bg-white"
+      class="grid grid-cols-1 md:grid-cols-12 border-y border-gray-200 divide-y md:divide-y-0 md:divide-x divide-gray-200 editorial-reveal bg-white"
     >
       <div class="col-span-1 md:col-span-3 p-6 md:p-12">
         <span
@@ -52,7 +49,7 @@ onMounted(() => {
           </li>
           <li class="flex justify-between border-b border-gray-100 pb-2">
             <span class="text-muted">Chuyên môn</span>
-            <span class="text-right">Backend Developer</span>
+            <span class="text-right">Full-Stack Developer</span>
           </li>
           <li class="flex justify-between border-b border-gray-100 pb-2">
             <span class="text-muted">GPA Học vấn</span>
@@ -76,8 +73,8 @@ onMounted(() => {
         >
           Hệ thống không chỉ là tập hợp các dòng Code, mà là sự phối hợp chặt
           chẽ giữa logic và hạ tầng. Tôi tập trung vào việc tối ưu hóa hiệu năng
-          Database, thiết kế API chuẩn REST/gRPC, và xây dựng các core backend
-          đáp ứng hàng triệu request.
+          Database, thiết kế API chuẩn, và xây dựng các core backend đáp ứng nhu
+          cầu thực tế.
         </p>
       </div>
 
@@ -90,7 +87,7 @@ onMounted(() => {
           <span
             v-for="tool in toolsStack"
             :key="tool.name"
-            class="px-4 py-2 border border-gray-200 bg-gray-50/50 rounded-full text-sm font-semibold font-sans text-dark shadow-sm hover:border-indigo-200 hover:bg-white transition-all duration-300"
+            class="px-4 py-2 border border-gray-200 bg-gray-50/50 rounded-full text-sm font-semibold font-sans text-dark shadow-sm hover:border-indigo-200 hover:bg-white hover:text-indigo-600 transition-all duration-300"
           >
             {{ tool.name }}
           </span>
@@ -102,7 +99,7 @@ onMounted(() => {
       class="overflow-hidden whitespace-nowrap py-6 md:py-10 border-b border-dark bg-dark text-white select-none editorial-reveal relative"
     >
       <div
-        class="marquee-content flex text-[6vw] md:text-[4vw] font-display font-bold uppercase tracking-widest"
+        class="marquee-content flex text-[6vw] md:text-[4vw] font-display font-extrabold uppercase tracking-widest"
       >
         <span
           >&nbsp;OPTIMIZED BACKEND — HIGH LOAD ARCHITECTURE — DATABASE DESIGN —

@@ -1,9 +1,8 @@
 <script setup>
-import { onMounted, ref } from "vue";
+import { onMounted } from "vue";
 import gsap from "gsap";
-
-// FIX: Tham chiếu đến ảnh đại diện thực của sếp
-const myAvatarSource = ref("/image_fc4a2a.jpg");
+// Lấy đúng ảnh cá nhân của bạn từ thư mục assets
+import avatarImg from "../assets/AnhThe.png";
 
 onMounted(() => {
   const tl = gsap.timeline();
@@ -28,7 +27,6 @@ onMounted(() => {
   );
 });
 
-// Hàm chia chữ để tạo hiệu ứng GSAP cho từng ký tự
 const splitText = (text) => text.split("");
 </script>
 
@@ -51,22 +49,22 @@ const splitText = (text) => text.split("");
 
     <div class="mt-20 md:mt-10 z-10 pointer-events-none">
       <h1
-        class="text-[14vw] md:text-[11vw] font-display text-dark leading-[0.9] tracking-tight uppercase flex flex-wrap overflow-hidden"
+        class="text-[14vw] md:text-[11vw] font-display font-extrabold text-dark leading-[0.95] tracking-tight uppercase flex flex-wrap overflow-hidden pt-2 pb-2"
       >
         <span
-          v-for="(char, i) in splitText('HỆ_THỐNG')"
+          v-for="(char, i) in splitText('SYSTEM')"
           :key="i"
           class="char-reveal block"
           >{{ char }}</span
         >
       </h1>
       <h1
-        class="text-[14vw] md:text-[11vw] font-display text-transparent text-stroke leading-[0.9] tracking-tight uppercase flex flex-wrap overflow-hidden -ml-1"
+        class="text-[14vw] md:text-[11vw] font-display font-extrabold text-stroke leading-[0.95] tracking-tight uppercase flex flex-wrap overflow-hidden -ml-1 pt-2 pb-4"
       >
         <span
-          v-for="(char, i) in splitText('LÕI_BACKEND')"
+          v-for="(char, i) in splitText('ARCHITECT')"
           :key="i"
-          class="char-reveal block text-indigo-600"
+          class="char-reveal block"
           >{{ char }}</span
         >
       </h1>
@@ -80,7 +78,7 @@ const splitText = (text) => text.split("");
           class="w-16 h-16 md:w-20 md:h-20 rounded-full overflow-hidden shadow-2xl shrink-0 border-2 border-white"
         >
           <img
-            :src="myAvatarSource"
+            :src="avatarImg"
             alt="LuNu Portfolio"
             class="w-full h-full object-cover"
           />
@@ -127,10 +125,3 @@ const splitText = (text) => text.split("");
     </div>
   </section>
 </template>
-
-<style scoped>
-.text-stroke {
-  /* FIX: Giảm stroke width một chút để góc chữ rõ hơn */
-  -webkit-text-stroke: 1.5px #111827;
-}
-</style>

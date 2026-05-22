@@ -1,17 +1,17 @@
 /** @type {import('tailwindcss').Config} */
 export default {
   content: ["./index.html", "./src/**/*.{vue,js,ts,jsx,tsx}"],
+  darkMode: "class",
   theme: {
     extend: {
       colors: {
-        background: "#FAFAFA",
+        background: "#F8FAFC" /* Off-white mượt hơn */,
         surface: "#FFFFFF",
-        border: "#F3F4F6",
-        muted: "#6B7280",
-        dark: "#111827",
+        border: "#E2E8F0",
+        muted: "#64748B",
+        dark: "#0F172A" /* Slate 900 - Dịu mắt hơn đen thuần */,
       },
       fontFamily: {
-        /* Phân bổ rõ ràng font tiêu đề và font body */
         sans: ['"Plus Jakarta Sans"', "sans-serif"],
         display: ['"Syne"', "sans-serif"],
         mono: ["JetBrains Mono", "monospace"],

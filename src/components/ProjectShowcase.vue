@@ -3,13 +3,15 @@ import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { projects } from "../data/projects";
 import gsap from "gsap";
+import ScrollTrigger from "gsap/ScrollTrigger";
+import { useI18n } from "vue-i18n";
 
 const router = useRouter();
 const floatImg = ref(null);
 const activeProject = ref(null);
+const { locale } = useI18n();
 
 onMounted(() => {
-  // GSAP quickTo cho ảnh trôi
   const xTo = gsap.quickTo(floatImg.value, "x", {
     duration: 0.6,
     ease: "power4.out",
@@ -22,6 +24,16 @@ onMounted(() => {
   window.addEventListener("mousemove", (e) => {
     xTo(e.clientX);
     yTo(e.clientY);
+  });
+
+  gsap.utils.toArray(".project-item").forEach((item) => {
+    gsap.from(item, {
+      scrollTrigger: { trigger: item, start: "top 85%" },
+      y: 40,
+      opacity: 0,
+      duration: 0.8,
+      ease: "power2.out",
+    });
   });
 });
 
@@ -36,13 +48,44 @@ const handleMouseEnter = (project) => {
   });
 };
 
-const handleMouseLeave = () => {
+const handleMouseLeaveList = () => {
   if (window.innerWidth < 768) return;
   gsap.to(floatImg.value, {
-    scale: 0.8,
+    scale: 0.85,
     opacity: 0,
     duration: 0.4,
     ease: "power3.out",
+  });
+};
+
+const handleMouseMove = (e, targetId) => {
+  const el = document.getElementById(targetId);
+  if (!el) return;
+  const rect = el.getBoundingClientRect();
+  const x = e.clientX - rect.left;
+  const y = e.clientY - rect.top;
+  const centerX = rect.width / 2;
+  const centerY = rect.height / 2;
+  const rotateX = ((y - centerY) / centerY) * -8; // Giảm góc tilt để mượt & sang hơn
+  const rotateY = ((x - centerX) / centerX) * 8;
+
+  gsap.to(el, {
+    rotateX,
+    rotateY,
+    transformPerspective: 1200,
+    duration: 0.4,
+    ease: "power2.out",
+  });
+};
+
+const handleMouseLeaveCard = (targetId) => {
+  const el = document.getElementById(targetId);
+  if (!el) return;
+  gsap.to(el, {
+    rotateX: 0,
+    rotateY: 0,
+    duration: 0.7,
+    ease: "elastic.out(1, 0.4)",
   });
 };
 </script>
@@ -50,85 +93,75 @@ const handleMouseLeave = () => {
 <template>
   <section
     id="projects"
-    class="py-24 md:py-40 border-t border-gray-200 relative z-10"
+    class="py-32 md:py-48 border-t border-gray-200 dark:border-slate-800 relative z-10"
   >
-    <div class="px-6 md:px-12 mb-16 md:mb-24 flex justify-between items-end">
-      <h2 class="text-3xl md:text-5xl font-bold text-dark tracking-tighter">
-        Case Studies.
+    <div
+      class="px-8 md:px-14 max-w-7xl mx-auto mb-20 md:mb-32 flex justify-between items-end"
+    >
+      <h2
+        class="text-4xl md:text-6xl font-display font-bold text-dark dark:text-white tracking-tight"
+      >
+        {{ $t("project.title") }}.
       </h2>
       <span
-        class="font-mono text-xs uppercase tracking-widest text-muted hidden md:block"
-        >(04) Thực Chiến</span
+        class="font-mono text-xs uppercase tracking-[0.2em] text-muted hidden md:block"
+        >{{ $t("project.subtitle") }}</span
       >
-    </div>
-
-    <div class="md:hidden px-6 flex flex-col gap-12">
-      <div
-        v-for="project in projects"
-        :key="'mob-' + project.id"
-        @click="router.push(`/project/${project.id}`)"
-        class="block cursor-pointer"
-      >
-        <div
-          class="w-full aspect-video rounded-xl overflow-hidden mb-4 shadow-sm"
-        >
-          <img :src="project.image" class="w-full h-full object-cover" />
-        </div>
-        <h3 class="text-3xl font-bold text-dark tracking-tighter mb-2">
-          {{ project.title }}
-        </h3>
-        <p class="text-sm text-muted font-mono">{{ project.role }}</p>
-      </div>
     </div>
 
     <ul
-      class="hidden md:block w-full border-b border-gray-200 relative bg-background/50 backdrop-blur-sm"
-      @mouseleave="handleMouseLeave"
+      class="hidden md:block w-full border-b border-gray-200 dark:border-slate-800 relative bg-background/30 dark:bg-slate-950/30 backdrop-blur-sm"
+      @mouseleave="handleMouseLeaveList"
     >
       <li
-        v-for="project in projects"
+        v-for="(project, index) in projects"
         :key="project.id"
+        :id="'proj-card-' + index"
+        class="project-item group border-t border-gray-200 dark:border-slate-800 px-8 md:px-14 py-12 flex justify-between items-center cursor-pointer transition-colors duration-500 hover:bg-white dark:hover:bg-slate-900"
         @mouseenter="handleMouseEnter(project)"
+        @mousemove="(e) => handleMouseMove(e, 'proj-card-' + index)"
+        @mouseleave="handleMouseLeaveCard('proj-card-' + index)"
         @click="router.push(`/project/${project.id}`)"
-        class="group border-t border-gray-200 px-12 py-10 flex justify-between items-center cursor-pointer transition-colors duration-500 hover:bg-white"
       >
-        <div class="flex items-center gap-12 relative z-20">
-          <span class="font-mono text-sm text-muted font-bold">{{
+        <div
+          class="flex items-center gap-14 relative z-20 pointer-events-none max-w-7xl mx-auto w-full"
+        >
+          <span class="font-mono text-[13px] text-muted font-medium w-12">{{
             project.timeline.substring(0, 4)
           }}</span>
 
           <h3
-            class="relative text-6xl lg:text-[6rem] font-bold tracking-tighter uppercase transition-transform duration-500 ease-out group-hover:translate-x-6 text-transparent"
-            style="-webkit-text-stroke: 1px #111827"
+            class="flex-1 relative text-5xl lg:text-7xl font-display font-bold tracking-tight uppercase transition-transform duration-500 ease-out group-hover:translate-x-8 text-transparent"
+            style="-webkit-text-stroke: 1px currentColor"
           >
             {{ project.title }}
             <span
-              class="absolute top-0 left-0 w-0 overflow-hidden text-indigo-600 group-hover:w-full transition-all duration-700 ease-out whitespace-nowrap"
+              class="absolute top-0 left-0 w-0 overflow-hidden text-indigo-600 dark:text-indigo-400 group-hover:w-full transition-all duration-700 ease-out whitespace-nowrap"
               style="-webkit-text-stroke: 0px"
             >
               {{ project.title }}
             </span>
           </h3>
-        </div>
-        <div
-          class="text-right relative z-20 group-hover:-translate-x-4 transition-transform duration-500 ease-out"
-        >
-          <span
-            class="block font-mono text-sm tracking-widest uppercase font-bold text-indigo-600 mb-2"
-            >{{ project.role }}</span
+
+          <div
+            class="text-right relative z-20 pointer-events-none group-hover:-translate-x-6 transition-transform duration-500 ease-out"
           >
-          <span class="block text-muted text-sm">{{
-            project.technologies.slice(0, 3).join(" • ")
-          }}</span>
+            <span
+              class="block font-mono text-[12px] tracking-[0.15em] uppercase font-bold text-indigo-600 dark:text-indigo-400 mb-3"
+              >{{ project.role[locale] }}</span
+            >
+            <span class="block text-muted text-[13px] tracking-wide">{{
+              project.technologies.slice(0, 3).join(" • ")
+            }}</span>
+          </div>
         </div>
       </li>
     </ul>
 
     <div
       ref="floatImg"
-      class="fixed top-0 left-0 w-[450px] aspect-[16/10] pointer-events-none z-[100] opacity-0 scale-75 -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded-2xl shadow-2xl hidden md:block border border-white"
+      class="fixed top-0 left-0 w-[400px] aspect-[4/3] pointer-events-none z-[100] opacity-0 scale-90 -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded-xl shadow-2xl hidden md:block border border-white/10 dark:border-white/5"
     >
-      <div class="absolute inset-0 bg-dark/10 z-10"></div>
       <img
         v-if="activeProject"
         :src="activeProject.image"

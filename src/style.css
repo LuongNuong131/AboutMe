@@ -18,10 +18,16 @@
   }
 }
 
-body,
-a,
-button {
-  cursor: auto !important;
+/* Tắt con trỏ chuột mặc định trên PC để dùng Custom Cursor */
+@media (pointer: fine) {
+  body,
+  a,
+  button,
+  input,
+  textarea,
+  .cursor-interactive {
+    cursor: none !important;
+  }
 }
 
 .page-enter-active,
@@ -41,10 +47,8 @@ button {
 }
 
 /* =========================================
-   SIÊU HIỆU ỨNG CHO CHỮ & THẺ DỰ ÁN
+   CÁC HIỆU ỨNG TỪ PHẦN TRƯỚC
    ========================================= */
-
-/* Hiệu ứng nảy sóng (Wave Bounce) cho từng ký tự */
 @keyframes wave-bounce {
   0% {
     transform: translateY(0) scale(1);
@@ -64,7 +68,6 @@ button {
     text-shadow: none;
   }
 }
-
 .char-hover-effect {
   display: inline-block;
   transition:
@@ -72,12 +75,10 @@ button {
     color 0.3s ease;
   will-change: transform, color, text-shadow;
 }
-
 .project-item:hover .char-hover-effect {
   animation: wave-bounce 0.8s cubic-bezier(0.45, 0, 0.15, 1) infinite;
 }
 
-/* Hiệu ứng thẻ 3D Spotlight theo chuột */
 .spotlight-card {
   position: relative;
   overflow: hidden;
@@ -104,7 +105,6 @@ button {
   opacity: 1;
 }
 
-/* Hiệu ứng Floating cho Tech Stack */
 .floating-tag {
   animation: floating 3s ease-in-out infinite;
 }
@@ -127,7 +127,6 @@ button {
   z-index: 10;
 }
 
-/* Hiệu ứng Glitch & Distortion cho hình ảnh nổi */
 @keyframes glitch-anim {
   0% {
     clip-path: inset(20% 0 80% 0);
@@ -160,7 +159,6 @@ button {
     filter: hue-rotate(0deg);
   }
 }
-
 .glitch-image {
   position: relative;
 }
@@ -187,4 +185,25 @@ button {
   animation: glitch-anim 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) both infinite
     reverse;
   mix-blend-mode: color-dodge;
+}
+
+/* =========================================
+   TERMINAL MOCKUP EFFECTS
+   ========================================= */
+.terminal-glow {
+  box-shadow:
+    inset 0 0 20px rgba(16, 185, 129, 0.1),
+    0 0 30px rgba(16, 185, 129, 0.05);
+}
+@keyframes blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+.cursor-blink {
+  animation: blink 1s step-end infinite;
 }

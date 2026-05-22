@@ -23,11 +23,15 @@ const lenis = new Lenis({
   smoothTouch: false,
 });
 
-function raf(time) {
-  lenis.raf(time);
-  requestAnimationFrame(raf);
-}
-requestAnimationFrame(raf);
+// Đồng bộ Lenis với GSAP ScrollTrigger
+lenis.on("scroll", ScrollTrigger.update);
+
+gsap.ticker.add((time) => {
+  lenis.raf(time * 1000);
+});
+
+// Loại bỏ lag smoothing để cuộn không bị giật khung hình
+gsap.ticker.lagSmoothing(0);
 
 const app = createApp(App);
 

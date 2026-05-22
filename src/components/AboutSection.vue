@@ -1,9 +1,13 @@
 <script setup>
-import { onMounted, nextTick } from "vue";
+import { onMounted, onUnmounted, ref, nextTick } from "vue";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger);
+
+// Sử dụng Template Ref để cô lập phạm vi DOM cho GSAP
+const aboutRef = ref(null);
+let ctx;
 
 const stats = [
   { value: "3+", label: "Năm học tập" },
@@ -27,66 +31,91 @@ const advancedTools = [
 
 onMounted(() => {
   nextTick(() => {
-    // Đảm bảo DOM đã dựng xong hoàn toàn mới tính toán tọa độ cuộn chuột
+    // Độ trễ 1000ms để đảm bảo Page Transition và các phần tử ở trên (Hero section)
+    // đã hoàn tất việc render, tránh lệch trục tọa độ Y khi tính toán vị trí cuộn
     setTimeout(() => {
-      // Khởi tạo các diễn hoạt mượt mà
-      gsap.from(".about-heading", {
-        scrollTrigger: {
-          trigger: "#about",
-          start: "top 85%",
-          toggleActions: "play none none none",
-        },
-        y: 50,
-        opacity: 0,
-        duration: 1,
-        ease: "power3.out",
-      });
+      ctx = gsap.context(() => {
+        // 1. Diễn hoạt cho Tiêu đề
+        gsap.fromTo(
+          ".about-heading",
+          { y: 50, opacity: 0 },
+          {
+            scrollTrigger: {
+              trigger: ".about-heading",
+              start: "top 85%",
+              toggleActions: "play none none none",
+            },
+            y: 0,
+            opacity: 1,
+            duration: 1,
+            ease: "power3.out",
+          },
+        );
 
-      gsap.from(".stat-block", {
-        scrollTrigger: {
-          trigger: ".stats-row",
-          start: "top 90%",
-          toggleActions: "play none none none",
-        },
-        y: 40,
-        opacity: 0,
-        scale: 0.95,
-        duration: 0.6,
-        stagger: 0.08,
-        ease: "back.out(1.4)",
-      });
+        // 2. Diễn hoạt cho khối Thống kê (Stats)
+        gsap.fromTo(
+          ".stat-block",
+          { y: 40, opacity: 0, scale: 0.95 },
+          {
+            scrollTrigger: {
+              trigger: ".stats-row",
+              start: "top 90%",
+              toggleActions: "play none none none",
+            },
+            y: 0,
+            opacity: 1,
+            scale: 1,
+            duration: 0.6,
+            stagger: 0.08,
+            ease: "back.out(1.4)",
+          },
+        );
 
-      gsap.from(".about-card", {
-        scrollTrigger: {
-          trigger: ".about-grid",
-          start: "top 90%",
-          toggleActions: "play none none none",
-        },
-        y: 45,
-        opacity: 0,
-        duration: 0.8,
-        stagger: 0.12,
-        ease: "power2.out",
-      });
+        // 3. Diễn hoạt cho Khối tư duy hệ thống (About Cards)
+        // Chuyển hoàn toàn sang từ fromTo để ép trình duyệt render chính xác opacity: 1
+        gsap.fromTo(
+          ".about-card",
+          { y: 45, opacity: 0 },
+          {
+            scrollTrigger: {
+              trigger: ".about-grid",
+              start: "top bottom-=50px", // Trigger an toàn ngay khi chạm cạnh dưới màn hình
+              toggleActions: "play none none none",
+              invalidateOnRefresh: true, // Tự động tính toán lại nếu resize hoặc cập nhật layout
+            },
+            y: 0,
+            opacity: 1,
+            duration: 0.8,
+            stagger: 0.12,
+            ease: "power2.out",
+          },
+        );
 
-      // Vòng chạy Marquee chữ chuyển động liên tục
-      gsap.to(".marquee-track", {
-        xPercent: -50,
-        ease: "none",
-        duration: 25,
-        repeat: -1,
-      });
+        // 4. Vòng chạy chữ Marquee liên tục không đổi
+        gsap.to(".marquee-track", {
+          xPercent: -50,
+          ease: "none",
+          duration: 25,
+          repeat: -1,
+        });
+      }, aboutRef.value); // Khoanh vùng chỉ kích hoạt GSAP trong phạm vi component này
 
-      // Ép ScrollTrigger tính toán lại toàn bộ vị trí để loại bỏ lỗi khoảng trắng
+      // Buộc ScrollTrigger đo đạc lại toàn bộ vị trí các điểm neo trên trang
       ScrollTrigger.refresh();
-    }, 200);
+    }, 1000);
   });
+});
+
+// Dọn dẹp sạch sẽ tài nguyên khi chuyển trang, tránh rò rỉ bộ nhớ
+onUnmounted(() => {
+  if (ctx) ctx.revert();
 });
 </script>
 
 <template>
   <section
     id="about"
+    ref="aboutRef"
     class="pt-24 md:pt-32 relative z-10 overflow-hidden bg-background dark:bg-slate-950 transition-colors duration-700"
   >
     <div
@@ -146,7 +175,7 @@ onMounted(() => {
       <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
         <div
           v-for="stat in stats"
-          :key="stat.value"
+          :key="stat.label"
           class="stat-block group p-6 rounded-2xl border border-gray-100 dark:border-slate-800/80 bg-white/70 dark:bg-slate-900/40 backdrop-blur-md hover:border-indigo-300 dark:hover:border-indigo-500/50 hover:shadow-[0_15px_30px_-10px_rgba(99,102,241,0.1)] transition-all duration-300"
         >
           <div
@@ -317,9 +346,8 @@ onMounted(() => {
 </template>
 
 <style scoped>
-/* Đồng bộ cấu trúc chữ Barcode cho HUD hệ thống */
 @import url("https://fonts.googleapis.com/css2?family=Libre+Barcode+128&display=swap");
 .font-barcode {
-  font-family: "Libre Barcode 128", cubic-bezier(0.1, 0.7, 0.1, 1);
+  font-family: "Libre Barcode 128", sans-serif;
 }
 </style>

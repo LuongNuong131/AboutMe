@@ -2,7 +2,6 @@
 import { onMounted } from "vue";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
-import { toolsStack } from "../data/tools";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -11,6 +10,19 @@ const stats = [
   { value: "6", label: "Dự án thực chiến" },
   { value: "12+", label: "Công nghệ" },
   { value: "3.0", label: "GPA" },
+];
+
+const advancedTools = [
+  "Java Spring Boot",
+  "Vue.js 3",
+  "Python Automation",
+  "Selenium / Playwright",
+  "MySQL / SQL Server",
+  "Pine Script",
+  "FastAPI",
+  "WebSockets / STOMP",
+  "Docker Compose",
+  "Git / CI/CD",
 ];
 
 onMounted(() => {
@@ -50,7 +62,6 @@ onMounted(() => {
     ease: "power2.out",
   });
 
-  // Marquee
   gsap.to(".marquee-track", {
     xPercent: -50,
     ease: "none",
@@ -65,7 +76,7 @@ onMounted(() => {
     <div class="px-8 md:px-14 mb-20 about-heading">
       <div class="flex items-end justify-between">
         <h2
-          class="text-[12vw] md:text-[8vw] font-display font-extrabold text-dark dark:text-white leading-[0.88] tracking-tight uppercase"
+          class="text-[10vw] md:text-[6vw] font-heading font-extrabold text-dark dark:text-white leading-[1.1] tracking-tighter uppercase"
         >
           Tư Duy<br />Hệ Thống.
         </h2>
@@ -113,15 +124,14 @@ onMounted(() => {
           class="absolute top-0 right-0 w-32 h-32 rounded-bl-full opacity-[0.06]"
           style="background: radial-gradient(circle, #6366f1, transparent)"
         ></div>
-
         <span
           class="block font-mono text-[10px] uppercase tracking-widest text-indigo-500 mb-8"
         >
           // Hồ Sơ Engineer
         </span>
-        <ul class="space-y-5 text-sm font-sans">
+        <ul class="space-y-4 text-sm font-sans">
           <li
-            class="flex justify-between items-center pb-4 border-b border-gray-100 dark:border-slate-800"
+            class="flex justify-between items-center pb-3 border-b border-gray-100 dark:border-slate-800"
           >
             <span class="text-muted font-medium">Tên</span>
             <span class="font-bold text-dark dark:text-white text-right"
@@ -129,22 +139,33 @@ onMounted(() => {
             >
           </li>
           <li
-            class="flex justify-between items-center pb-4 border-b border-gray-100 dark:border-slate-800"
+            class="flex justify-between items-center pb-3 border-b border-gray-100 dark:border-slate-800"
           >
-            <span class="text-muted font-medium">Chuyên môn</span>
-            <span class="font-bold text-dark dark:text-white text-right"
-              >Full-Stack Dev Intern</span
+            <span class="text-muted font-medium">Ngày sinh</span>
+            <span
+              class="font-bold text-dark dark:text-white text-right font-mono"
+              >13.01.2005</span
             >
           </li>
           <li
-            class="flex justify-between items-center pb-4 border-b border-gray-100 dark:border-slate-800"
+            class="flex justify-between items-center pb-3 border-b border-gray-100 dark:border-slate-800"
           >
-            <span class="text-muted font-medium">GPA</span>
-            <span class="font-bold text-indigo-600 dark:text-indigo-400"
-              >3.0 / 4.0</span
+            <span class="text-muted font-medium">Khu vực</span>
+            <span class="font-bold text-dark dark:text-white text-right"
+              >Hóc Môn, TP.HCM</span
             >
           </li>
-          <li class="flex justify-between items-center">
+          <li
+            class="flex flex-col justify-between items-start pb-3 border-b border-gray-100 dark:border-slate-800 gap-2"
+          >
+            <span class="text-muted font-medium">Đam mê & Sở thích</span>
+            <span
+              class="font-bold text-indigo-600 dark:text-indigo-400 text-right w-full text-xs leading-relaxed"
+            >
+              G-Funk Rap / GameFi & MMORPG / SMC Crypto Trading
+            </span>
+          </li>
+          <li class="flex justify-between items-center pt-1">
             <span class="text-muted font-medium">Status</span>
             <span
               class="flex items-center gap-2 font-bold text-emerald-600 dark:text-emerald-400"
@@ -165,7 +186,6 @@ onMounted(() => {
           class="absolute -bottom-8 -right-8 w-40 h-40 rounded-full opacity-[0.08]"
           style="background: radial-gradient(circle, #6366f1, transparent)"
         ></div>
-
         <span
           class="block font-mono text-[10px] uppercase tracking-widest text-indigo-500 mb-6"
         >
@@ -182,29 +202,30 @@ onMounted(() => {
         <p
           class="text-sm text-muted dark:text-slate-400 font-medium leading-loose relative z-10"
         >
-          Là Cử nhân chuyên ngành Phát triển phần mềm tại FPT Polytechnic với
-          điểm số GPA 3.0, sở hữu nền tảng kỹ thuật tốt về hệ thống Core Backend
-          vững chãi kết hợp tư duy xử lý logic game, quản trị vận hành toàn
-          trình từ khâu thiết kế dữ liệu đến triển khai sản phẩm thực tế, cam
-          kết mang lại giá trị bền vững.
+          Là Cử nhân chuyên ngành Phát triển phần mềm tại FPT Polytechnic, tôi
+          sở hữu nền tảng vững chãi về hệ thống Core Backend, thuật toán, và cấu
+          trúc xử lý GameFi. Cùng với kỹ năng khai thác tự động hóa (Python
+          Automation), tôi luôn hướng tới các giải pháp quản trị vận hành toàn
+          trình hiệu suất cao.
         </p>
       </div>
 
       <div
-        class="about-card col-span-1 md:col-span-3 p-8 rounded-3xl border border-gray-200 dark:border-slate-800 bg-white/90 dark:bg-slate-900/70 backdrop-blur-sm hover:shadow-xl hover:shadow-indigo-500/5 transition-all duration-500 relative overflow-hidden"
+        class="about-card col-span-1 md:col-span-3 p-8 rounded-3xl border border-gray-200 dark:border-slate-800 bg-white/90 dark:bg-slate-900/70 backdrop-blur-sm transition-all duration-500 relative overflow-hidden"
       >
         <span
           class="block font-mono text-[10px] uppercase tracking-widest text-indigo-500 mb-6"
         >
-          // Tech Stack
+          // Vũ Khí Kỹ Thuật
         </span>
-        <div class="tools-grid flex flex-wrap gap-2">
+        <div class="tools-grid flex flex-wrap gap-2.5">
           <span
-            v-for="tool in toolsStack"
-            :key="tool.name"
-            class="tool-tag px-3 py-1.5 border border-gray-200 dark:border-slate-700 bg-gray-50/80 dark:bg-slate-800/60 rounded-xl text-xs font-semibold font-mono text-dark dark:text-slate-300 hover:border-indigo-300 dark:hover:border-indigo-700 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 hover:text-indigo-600 dark:hover:text-indigo-400 transition-all duration-300 cursor-default"
+            v-for="(tool, i) in advancedTools"
+            :key="tool"
+            class="tool-tag floating-tag neon-hover px-3 py-2 border border-gray-200 dark:border-slate-700 bg-gray-50/80 dark:bg-slate-800/60 rounded-xl text-xs font-semibold font-mono text-dark dark:text-slate-300 transition-all duration-300 cursor-default relative overflow-hidden"
+            :style="{ animationDelay: `${i * 0.2}s` }"
           >
-            {{ tool.name }}
+            {{ tool }}
           </span>
         </div>
       </div>
@@ -225,26 +246,25 @@ onMounted(() => {
         class="absolute right-0 top-0 bottom-0 w-20 z-10 pointer-events-none"
         style="background: linear-gradient(to left, #0f172a, transparent)"
       ></div>
-
       <div
         class="marquee-track flex text-[5.5vw] md:text-[3.5vw] font-display font-extrabold uppercase tracking-widest"
       >
-        <span class="opacity-90">&nbsp;OPTIMIZED BACKEND&nbsp;</span>
-        <span class="text-indigo-400">✦</span>
-        <span class="opacity-90">&nbsp;HIGH LOAD ARCHITECTURE&nbsp;</span>
-        <span class="text-indigo-400">✦</span>
-        <span class="opacity-90">&nbsp;DATABASE DESIGN&nbsp;</span>
-        <span class="text-indigo-400">✦</span>
-        <span class="opacity-90">&nbsp;SCALABLE SYSTEMS&nbsp;</span>
-        <span class="text-indigo-400">✦</span>
-        <span class="opacity-90">&nbsp;OPTIMIZED BACKEND&nbsp;</span>
-        <span class="text-indigo-400">✦</span>
-        <span class="opacity-90">&nbsp;HIGH LOAD ARCHITECTURE&nbsp;</span>
-        <span class="text-indigo-400">✦</span>
-        <span class="opacity-90">&nbsp;DATABASE DESIGN&nbsp;</span>
-        <span class="text-indigo-400">✦</span>
-        <span class="opacity-90">&nbsp;SCALABLE SYSTEMS&nbsp;</span>
-        <span class="text-indigo-400">✦</span>
+        <span class="opacity-90">&nbsp;OPTIMIZED BACKEND&nbsp;</span
+        ><span class="text-indigo-400">✦</span>
+        <span class="opacity-90">&nbsp;HIGH LOAD ARCHITECTURE&nbsp;</span
+        ><span class="text-indigo-400">✦</span>
+        <span class="opacity-90">&nbsp;PYTHON AUTOMATION&nbsp;</span
+        ><span class="text-indigo-400">✦</span>
+        <span class="opacity-90">&nbsp;SCALABLE SYSTEMS&nbsp;</span
+        ><span class="text-indigo-400">✦</span>
+        <span class="opacity-90">&nbsp;OPTIMIZED BACKEND&nbsp;</span
+        ><span class="text-indigo-400">✦</span>
+        <span class="opacity-90">&nbsp;HIGH LOAD ARCHITECTURE&nbsp;</span
+        ><span class="text-indigo-400">✦</span>
+        <span class="opacity-90">&nbsp;PYTHON AUTOMATION&nbsp;</span
+        ><span class="text-indigo-400">✦</span>
+        <span class="opacity-90">&nbsp;SCALABLE SYSTEMS&nbsp;</span
+        ><span class="text-indigo-400">✦</span>
       </div>
     </div>
   </section>

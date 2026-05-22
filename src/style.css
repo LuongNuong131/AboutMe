@@ -12,7 +12,6 @@
 }
 
 @layer utilities {
-  /* Xử lý viền chữ đẹp hoàn hảo, không lẹm góc */
   .text-stroke {
     -webkit-text-stroke: 1.5px #111827;
     color: transparent;
@@ -24,6 +23,7 @@ a,
 button {
   cursor: auto !important;
 }
+
 .page-enter-active,
 .page-leave-active {
   transition: all 0.6s cubic-bezier(0.76, 0, 0.24, 1);
@@ -38,4 +38,153 @@ button {
 }
 ::-webkit-scrollbar {
   display: none;
+}
+
+/* =========================================
+   SIÊU HIỆU ỨNG CHO CHỮ & THẺ DỰ ÁN
+   ========================================= */
+
+/* Hiệu ứng nảy sóng (Wave Bounce) cho từng ký tự */
+@keyframes wave-bounce {
+  0% {
+    transform: translateY(0) scale(1);
+    color: inherit;
+    text-shadow: none;
+  }
+  50% {
+    transform: translateY(-15px) scale(1.1);
+    color: #818cf8;
+    text-shadow:
+      0 0 25px rgba(129, 140, 248, 0.9),
+      0 0 10px rgba(129, 140, 248, 0.5);
+  }
+  100% {
+    transform: translateY(0) scale(1);
+    color: inherit;
+    text-shadow: none;
+  }
+}
+
+.char-hover-effect {
+  display: inline-block;
+  transition:
+    transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275),
+    color 0.3s ease;
+  will-change: transform, color, text-shadow;
+}
+
+.project-item:hover .char-hover-effect {
+  animation: wave-bounce 0.8s cubic-bezier(0.45, 0, 0.15, 1) infinite;
+}
+
+/* Hiệu ứng thẻ 3D Spotlight theo chuột */
+.spotlight-card {
+  position: relative;
+  overflow: hidden;
+}
+.spotlight-card::before {
+  content: "";
+  position: absolute;
+  top: var(--y, 0);
+  left: var(--x, 0);
+  transform: translate(-50%, -50%);
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(
+    circle closest-side,
+    rgba(99, 102, 241, 0.12),
+    transparent
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+  z-index: 10;
+}
+.spotlight-card:hover::before {
+  opacity: 1;
+}
+
+/* Hiệu ứng Floating cho Tech Stack */
+.floating-tag {
+  animation: floating 3s ease-in-out infinite;
+}
+@keyframes floating {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+.neon-hover:hover {
+  box-shadow:
+    0 0 15px rgba(99, 102, 241, 0.6),
+    inset 0 0 10px rgba(99, 102, 241, 0.3);
+  border-color: #818cf8;
+  transform: scale(1.05) translateY(-5px);
+  z-index: 10;
+}
+
+/* Hiệu ứng Glitch & Distortion cho hình ảnh nổi */
+@keyframes glitch-anim {
+  0% {
+    clip-path: inset(20% 0 80% 0);
+    transform: translate(-2px, 2px);
+    filter: hue-rotate(0deg);
+  }
+  20% {
+    clip-path: inset(60% 0 10% 0);
+    transform: translate(2px, -2px);
+    filter: hue-rotate(45deg);
+  }
+  40% {
+    clip-path: inset(40% 0 50% 0);
+    transform: translate(-2px, 2px);
+    filter: hue-rotate(90deg);
+  }
+  60% {
+    clip-path: inset(80% 0 5% 0);
+    transform: translate(2px, -2px);
+    filter: hue-rotate(135deg);
+  }
+  80% {
+    clip-path: inset(10% 0 70% 0);
+    transform: translate(-2px, 2px);
+    filter: hue-rotate(180deg);
+  }
+  100% {
+    clip-path: inset(30% 0 50% 0);
+    transform: translate(2px, -2px);
+    filter: hue-rotate(0deg);
+  }
+}
+
+.glitch-image {
+  position: relative;
+}
+.glitch-image::before,
+.glitch-image::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: inherit;
+  background-size: cover;
+  background-position: center;
+  opacity: 0;
+  pointer-events: none;
+}
+.float-img-active .glitch-image {
+  animation: glitch-anim 2s cubic-bezier(0.25, 0.46, 0.45, 0.94) both infinite
+    alternate;
+}
+.float-img-active .glitch-image::before {
+  opacity: 0.5;
+  animation: glitch-anim 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) both infinite
+    reverse;
+  mix-blend-mode: color-dodge;
 }

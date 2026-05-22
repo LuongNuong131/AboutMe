@@ -13,7 +13,8 @@ export default {
       },
       fontFamily: {
         sans: ['"Inter"', "sans-serif"],
-        display: ['"Inter"', "sans-serif"],
+        display: ['"Space Grotesk"', "sans-serif"],
+        heading: ['"Syncopate"', "sans-serif"],
         mono: ["JetBrains Mono", "monospace"],
       },
       animation: {

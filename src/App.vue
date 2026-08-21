@@ -6,12 +6,17 @@ import { useCursor } from "./composables/useCursor";
 const { cursor, cursorText, isHovering } = useCursor();
 
 useHead({
-  title: "Trần Quang Lương - Kỹ Sư Hệ Thống",
+  title: "Trần Quang Lương — Software Engineer",
   meta: [
     {
       name: "description",
       content:
-        "Portfolio của LuNu - Kỹ sư phần mềm chuyên hệ thống Backend và Frontend.",
+        "Portfolio của Trần Quang Lương — Software Engineer tập trung vào backend, automation và kiến trúc hệ thống có thể mở rộng.",
+    },
+    { property: "og:title", content: "Trần Quang Lương — Software Engineer" },
+    {
+      property: "og:description",
+      content: "Building dependable systems with clarity, speed and intent.",
     },
     { property: "og:image", content: "/favicon.svg" },
   ],
@@ -19,35 +24,23 @@ useHead({
 </script>
 
 <template>
-  <div
-    class="relative min-h-screen text-dark font-sans selection:bg-indigo-500 selection:text-white z-0 bg-background dark:bg-slate-950 dark:text-slate-100 transition-colors duration-700 overflow-hidden"
-  >
+  <div class="site-shell">
     <div
       ref="cursor"
-      class="hidden md:flex fixed top-0 left-0 w-4 h-4 rounded-full pointer-events-none z-[9999] items-center justify-center -translate-x-1/2 -translate-y-1/2 bg-white mix-blend-difference"
-      style="will-change: transform, width, height"
+      class="custom-cursor"
+      aria-hidden="true"
     >
-      <span
-        v-if="isHovering"
-        class="text-[10px] font-bold text-dark font-mono uppercase tracking-[0.2em] pointer-events-none"
-      >
-        {{ cursorText }}
-      </span>
+      <span v-if="isHovering">{{ cursorText }}</span>
     </div>
 
-    <div
-      class="fixed inset-0 z-[100] pointer-events-none opacity-[0.02] dark:opacity-[0.04] mix-blend-darken dark:mix-blend-lighten"
-      style="
-        background-image: url(&quot;data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.8%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22/%3E%3C/svg%3E&quot;);
-      "
-    ></div>
+    <div class="grain-overlay" aria-hidden="true"></div>
+    <div class="ambient-orb ambient-orb--one" aria-hidden="true"></div>
+    <div class="ambient-orb ambient-orb--two" aria-hidden="true"></div>
 
-    <div class="relative z-10">
-      <RouterView v-slot="{ Component }">
-        <transition name="page" mode="out-in">
-          <component :is="Component" />
-        </transition>
-      </RouterView>
-    </div>
+    <RouterView v-slot="{ Component }">
+      <transition name="page" mode="out-in">
+        <component :is="Component" />
+      </transition>
+    </RouterView>
   </div>
 </template>

@@ -11,32 +11,23 @@ useHead({
     {
       name: "description",
       content:
-        "Portfolio của Trần Quang Lương — Software Engineer tập trung vào backend, automation và kiến trúc hệ thống có thể mở rộng.",
+        "Portfolio của Trần Quang Lương — Software Engineer tập trung vào backend, automation và kiến trúc hệ thống.",
     },
     { property: "og:title", content: "Trần Quang Lương — Software Engineer" },
     {
       property: "og:description",
-      content: "Building dependable systems with clarity, speed and intent.",
+      content: "Designing dependable systems with intent.",
     },
-    { property: "og:image", content: "/favicon.svg" },
   ],
 });
 </script>
 
 <template>
   <div class="site-shell">
-    <div
-      ref="cursor"
-      class="custom-cursor"
-      aria-hidden="true"
-    >
+    <div ref="cursor" class="custom-cursor" aria-hidden="true">
       <span v-if="isHovering">{{ cursorText }}</span>
     </div>
-
-    <div class="grain-overlay" aria-hidden="true"></div>
-    <div class="ambient-orb ambient-orb--one" aria-hidden="true"></div>
-    <div class="ambient-orb ambient-orb--two" aria-hidden="true"></div>
-
+    <div class="site-texture" aria-hidden="true"></div>
     <RouterView v-slot="{ Component }">
       <transition name="page" mode="out-in">
         <component :is="Component" />

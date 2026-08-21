@@ -17,6 +17,8 @@ const logicTitle = computed(() => isVi.value ? "Luồng nghiệp vụ chủ lự
 const architectureTitle = computed(() => isVi.value ? "Kiến trúc hạ tầng" : "System architecture");
 const challengeTitle = computed(() => isVi.value ? "Bài toán đáng nhớ" : "The challenge");
 const solutionTitle = computed(() => isVi.value ? "Cách tôi xử lý" : "The approach");
+const projectOverview = computed(() => isVi.value ? project.value?.overview : project.value?.overviewEn || project.value?.overview);
+const projectEvidence = computed(() => isVi.value ? project.value?.evidence : project.value?.evidenceEn || project.value?.evidence);
 const goBack = () => router.push({ name: "home" });
 </script>
 
@@ -31,14 +33,14 @@ const goBack = () => router.push({ name: "home" });
     <section class="case-hero">
       <img :src="project.image" :alt="project.title" class="case-hero-image" />
       <div class="case-hero-overlay"></div>
-      <div class="case-hero-top"><span>{{ project.timeline }}</span><span>{{ project.tagline }}</span></div>
+      <div class="case-hero-top"><span>{{ project.timeline }}</span><span>{{ project.category }} · {{ project.status }}</span></div>
       <div class="case-hero-content"><span class="case-eyebrow">Selected work / {{ projectIndex.toString().padStart(2, '0') }}</span><h1>{{ project.title }}</h1><p>{{ project.tagline }}</p></div>
       <div class="case-hero-bottom"><span>Trần Quang Lương</span><span>Backend · Systems · Product</span></div>
     </section>
 
     <section class="case-intro case-gutter">
       <div class="case-section-label"><span>01</span><i></i><span>{{ isVi ? "Tổng quan" : "Overview" }}</span></div>
-      <div class="case-intro-grid"><h2>{{ project.overview }}</h2><div class="case-intro-side"><div><span>{{ roleLabel }}</span><strong>{{ project.role[locale] || project.role.vi }}</strong></div><div><span>{{ isVi ? "Thời gian" : "Timeline" }}</span><strong>{{ project.timeline }}</strong></div><a v-if="project.links?.[0]?.url && project.links[0].url !== '#'" :href="project.links[0].url" target="_blank" rel="noreferrer">{{ project.links[0].label }} <ArrowUpRight :size="16" /></a></div></div>
+      <div class="case-intro-grid"><div><h2>{{ projectOverview }}</h2><p class="case-evidence">{{ projectEvidence }}</p></div><div class="case-intro-side"><div><span>{{ roleLabel }}</span><strong>{{ project.role[locale] || project.role.vi }}</strong></div><div><span>{{ isVi ? "Thời gian" : "Timeline" }}</span><strong>{{ project.timeline }}</strong></div><div><span>{{ isVi ? "Phân loại" : "Category" }}</span><strong>{{ project.category }}</strong></div><a v-if="project.links?.[0]?.url && project.links[0].url !== '#'" :href="project.links[0].url" target="_blank" rel="noreferrer">{{ project.links[0].label }} <ArrowUpRight :size="16" /></a></div></div>
     </section>
 
     <section class="case-dark-section case-gutter">

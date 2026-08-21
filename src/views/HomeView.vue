@@ -29,25 +29,27 @@ const router = useRouter();
 const { locale } = useI18n();
 const mobileMenuOpen = ref(false);
 const activeProject = ref(null);
+const activeProjectFilter = ref("all");
 const previewX = ref(0);
 const previewY = ref(0);
 const activeSection = ref("home");
 let observer;
 
 const isVi = computed(() => locale.value === "vi");
-const featuredProject = computed(() => projects[0]);
-const otherProjects = computed(() => projects.slice(1));
-
-const englishProjectSummaries = {
-  travelos: "An intelligent CRM for travel businesses, automating itinerary design, booking operations and AI-assisted tour content.",
-  echommo: "A browser-based MMORPG platform with a GameFi economy, real-time admin operations and a secure player marketplace.",
-  fcdbb: "A football club operating platform for player records, match schedules, performance-led team splitting and financial tracking.",
-  anhduong: "A fundraising platform designed around transparent donation flows, clear campaign storytelling and a frictionless contributor journey.",
-  bidamanagement: "A billiards club operating platform that automates table timing, services, inventory and revenue reporting.",
-  nhatromanagement: "A boarding-house management system that digitizes tenant records, room status and recurring utility billing.",
-};
-
-const projectSummary = (project) => isVi.value ? project.overview : englishProjectSummaries[project.id] || project.overview;
+const featuredProject = computed(() => projects.find((project) => project.featured) || projects[0]);
+const otherProjects = computed(() => projects.filter((project) => project.id !== featuredProject.value.id));
+const filteredProjects = computed(() => activeProjectFilter.value === "all" ? otherProjects.value : otherProjects.value.filter((project) => project.category === activeProjectFilter.value));
+const filterOptions = computed(() => [
+  { key: "all", label: isVi.value ? "Tất cả" : "All" },
+  { key: "Product systems", label: isVi.value ? "Product" : "Product" },
+  { key: "Complex systems", label: isVi.value ? "Systems" : "Systems" },
+  { key: "Internal operations", label: isVi.value ? "Operations" : "Operations" },
+  { key: "Academic / team project", label: isVi.value ? "Archive" : "Archive" },
+]);
+const projectSummary = (project) => isVi.value ? project.overview : project.overviewEn || project.overview;
+const projectEvidence = (project) => isVi.value ? project.evidence : project.evidenceEn || project.evidence;
+const projectCount = computed(() => String(projects.length).padStart(2, "0"));
+const projectNumber = (project) => String(projects.findIndex((item) => item.id === project.id) + 1).padStart(2, "0");
 
 const ui = computed(() => isVi.value ? {
   nav: [{ id: "about", label: "Về tôi" }, { id: "work", label: "Dự án" }, { id: "contact", label: "Liên hệ" }],
@@ -65,10 +67,10 @@ const ui = computed(() => isVi.value ? {
   introBody2: "Tôi thích những bài toán có chiều sâu: logic nghiệp vụ, trạng thái dữ liệu, hiệu năng và trải nghiệm người dùng. Mỗi dự án là một cơ hội để biến sự phức tạp thành một thứ rõ ràng hơn.",
   readMore: "Đọc câu chuyện",
   numbersKicker: "Một vài con số",
-  numbers: [{ value: "03+", label: "Năm học tập & thực chiến" }, { value: "06", label: "Dự án end-to-end" }, { value: "12+", label: "Công nghệ đã triển khai" }, { value: "3.0", label: "GPA tại FPT Polytechnic" }],
+  numbers: [{ value: "03+", label: "Năm học tập & thực chiến" }, { value: "07", label: "Dự án end-to-end" }, { value: "12+", label: "Công nghệ đã triển khai" }, { value: "3.0", label: "GPA tại FPT Polytechnic" }],
   workKicker: "Selected work / 2024—26",
   workTitle: "Những thứ tôi\nđã đưa vào đời sống.",
-  workBody: "Một tuyển tập những dự án nơi product thinking, hệ thống và chi tiết giao diện gặp nhau.",
+  workBody: "Một shortlist được chọn theo độ sâu của bài toán: realtime game systems, travel operations, MMORPG economy và những workflow có dữ liệu thật.",
   featured: "Dự án nổi bật",
   viewCase: "Xem case study",
   archive: "Mở toàn bộ archive",
@@ -105,10 +107,10 @@ const ui = computed(() => isVi.value ? {
   introBody2: "I enjoy problems with depth: business logic, data state, performance and user experience. Every project is a chance to turn something complicated into something clearer.",
   readMore: "Read the story",
   numbersKicker: "A few numbers",
-  numbers: [{ value: "03+", label: "Years learning & shipping" }, { value: "06", label: "End-to-end projects" }, { value: "12+", label: "Technologies deployed" }, { value: "3.0", label: "GPA at FPT Polytechnic" }],
+  numbers: [{ value: "03+", label: "Years learning & shipping" }, { value: "07", label: "End-to-end projects" }, { value: "12+", label: "Technologies deployed" }, { value: "3.0", label: "GPA at FPT Polytechnic" }],
   workKicker: "Selected work / 2024—26",
   workTitle: "Things I've\nbrought to life.",
-  workBody: "A collection of projects where product thinking, systems and interface details meet.",
+  workBody: "A shortlist selected for problem depth: realtime game systems, travel operations, MMORPG economy and data-heavy workflows.",
   featured: "Featured project",
   viewCase: "View case study",
   archive: "Open full archive",
@@ -207,12 +209,13 @@ onBeforeUnmount(() => observer?.disconnect());
       <div class="editorial-label"><span>{{ ui.workKicker }}</span><span class="editorial-label-line"></span><span>03</span></div>
       <div class="work-heading"><h2 v-html="ui.workTitle.replace(/\n/g, '<br />')"></h2><p>{{ ui.workBody }}</p></div>
       <article class="featured-work" @click="openProject(featuredProject)">
-        <div class="featured-image"><img :src="featuredProject.image" :alt="featuredProject.title" loading="lazy" /><div class="featured-image-overlay"></div><span class="featured-image-number">01 / 06</span><span class="featured-open"><MoveUpRight :size="22" /></span></div>
-        <div class="featured-content"><div class="featured-kicker"><span>{{ ui.featured }}</span><span>{{ featuredProject.timeline }}</span></div><h3>{{ featuredProject.title }}</h3><p>{{ projectSummary(featuredProject) }}</p><div class="project-tags"><span v-for="tech in featuredProject.technologies.slice(0, 5)" :key="tech">{{ tech }}</span></div><button type="button" class="case-study-link" @click.stop="openProject(featuredProject)">{{ ui.viewCase }} <ArrowUpRight :size="16" /></button></div>
+        <div class="featured-image"><img :src="featuredProject.image" :alt="featuredProject.title" loading="lazy" /><div class="featured-image-overlay"></div><span class="featured-image-number">01 / {{ projectCount }}</span><span class="featured-open"><MoveUpRight :size="22" /></span></div>
+        <div class="featured-content"><div class="featured-kicker"><span>{{ ui.featured }}</span><span>{{ featuredProject.timeline }}</span></div><h3>{{ featuredProject.title }}</h3><p>{{ projectSummary(featuredProject) }}</p><div class="featured-facts"><span>{{ featuredProject.category }}</span><span>{{ featuredProject.status }}</span></div><p class="featured-evidence">{{ projectEvidence(featuredProject) }}</p><div class="project-tags"><span v-for="tech in featuredProject.technologies.slice(0, 5)" :key="tech">{{ tech }}</span></div><button type="button" class="case-study-link" @click.stop="openProject(featuredProject)">{{ ui.viewCase }} <ArrowUpRight :size="16" /></button></div>
       </article>
-      <div class="archive-heading"><span>02—06</span><span>{{ isVi ? "Các dự án khác" : "More work" }}</span><span class="archive-line"></span></div>
+      <div class="archive-heading"><span>02—{{ projectCount }}</span><span>{{ isVi ? "Các dự án khác" : "More work" }}</span><span class="archive-line"></span></div>
+      <div class="archive-tools"><span>{{ isVi ? "Lọc theo loại project" : "Filter by project type" }}</span><div class="project-filter"><button v-for="filter in filterOptions" :key="filter.key" type="button" :class="{ active: activeProjectFilter === filter.key }" @click="activeProjectFilter = filter.key">{{ filter.label }}</button></div></div>
       <div class="project-archive">
-        <article v-for="(project, index) in otherProjects" :key="project.id" class="archive-row" @mouseenter="showPreview(project, $event)" @mousemove="movePreview" @mouseleave="hidePreview" @click="openProject(project)"><span class="archive-index">0{{ index + 2 }}</span><div class="archive-name"><h3>{{ project.title }}</h3><span>{{ project.tagline }}</span></div><span class="archive-year">{{ project.timeline }}</span><span class="archive-arrow"><ArrowUpRight :size="18" /></span></article>
+        <article v-for="(project, index) in filteredProjects" :key="project.id" class="archive-row" @mouseenter="showPreview(project, $event)" @mousemove="movePreview" @mouseleave="hidePreview" @click="openProject(project)"><span class="archive-index">{{ projectNumber(project) }}</span><div class="archive-name"><h3>{{ project.title }}</h3><span>{{ project.category }} · {{ project.status }}</span></div><span class="archive-year">{{ project.timeline }}</span><span class="archive-arrow"><ArrowUpRight :size="18" /></span></article>
       </div>
       <div v-if="activeProject" class="work-preview" :style="{ left: `${previewX + 22}px`, top: `${previewY - 140}px` }"><img :src="activeProject.image" :alt="activeProject.title" /><span>{{ activeProject.title }}</span></div>
       <a class="archive-link" href="https://github.com/LuongNuong131" target="_blank" rel="noreferrer">{{ ui.archive }} <ArrowUpRight :size="16" /></a>

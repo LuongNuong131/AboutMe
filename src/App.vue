@@ -6,17 +6,17 @@ import { useCursor } from "./composables/useCursor";
 const { cursor, cursorText, isHovering } = useCursor();
 
 useHead({
-  title: "Trần Quang Lương — Software Engineer",
+  title: "Trần Quang Lương — Full-Stack Developer",
   meta: [
     {
       name: "description",
       content:
-        "Portfolio của Trần Quang Lương — Software Engineer tập trung vào backend, automation và kiến trúc hệ thống.",
+        "Portfolio của Trần Quang Lương — Full-Stack Developer tập trung vào backend systems, dữ liệu và sản phẩm có thể vận hành.",
     },
-    { property: "og:title", content: "Trần Quang Lương — Software Engineer" },
+    { property: "og:title", content: "Trần Quang Lương — Full-Stack Developer" },
     {
       property: "og:description",
-      content: "Designing dependable systems with intent.",
+      content: "Backend · Systems · Product — xây dựng những hệ thống đáng tin cậy.",
     },
   ],
 });

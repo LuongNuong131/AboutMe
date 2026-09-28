@@ -1,5 +1,27 @@
-# Vue 3 + Vite
+# Trần Quang Lương — Portfolio
 
-This template should help get you started developing with Vue 3 in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+Portfolio cá nhân của Trần Quang Lương, xây dựng với **Vue 3 + Vite** theo phong cách editorial trắng–đen tối giản.
 
-Learn more about IDE Support for Vue in the [Vue Docs Scaling up Guide](https://vuejs.org/guide/scaling-up/tooling.html#ide-support).
+## Nội dung
+
+- Giới thiệu, kỹ năng và các dự án tiêu biểu
+- Archive có bộ lọc, case study riêng cho từng dự án
+- Hỗ trợ tiếng Việt / tiếng Anh và bố cục responsive
+- Tải CV PDF trực tiếp tại `/cv-tran-quang-luong.pdf`
+- Điều hướng bằng bàn phím, focus state rõ ràng, hỗ trợ `prefers-reduced-motion`
+
+## Chạy local
+
+```bash
+npm install
+npm run dev
+```
+
+## Build production
+
+```bash
+npm run build
+npm run preview
+```
+
+Build output nằm trong `dist/`; có thể triển khai trên Vercel hoặc static host tương thích Vite.

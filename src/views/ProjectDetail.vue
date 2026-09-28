@@ -11,6 +11,7 @@ const { locale } = useI18n();
 const isVi = computed(() => locale.value === "vi");
 const project = computed(() => projects.find((item) => item.id === route.params.id));
 const projectIndex = computed(() => Math.max(1, projects.findIndex((item) => item.id === route.params.id) + 1));
+const projectTotal = String(projects.length).padStart(2, "0");
 const backLabel = computed(() => isVi.value ? "Quay lại work archive" : "Back to work archive");
 const roleLabel = computed(() => isVi.value ? "Vai trò" : "Role");
 const logicTitle = computed(() => isVi.value ? "Luồng nghiệp vụ chủ lực" : "Core business flows");
@@ -27,7 +28,7 @@ const goBack = () => router.push({ name: "home" });
     <header class="case-study-header">
       <button type="button" class="case-back" @click="goBack"><ArrowLeft :size="17" /><span>{{ backLabel }}</span></button>
       <span class="case-brand">LQ / CASE STUDY</span>
-      <span class="case-count">0{{ projectIndex }} / 06</span>
+      <span class="case-count">{{ String(projectIndex).padStart(2, "0") }} / {{ projectTotal }}</span>
     </header>
 
     <section class="case-hero">

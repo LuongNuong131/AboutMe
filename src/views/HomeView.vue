@@ -11,6 +11,7 @@ import {
   Code2,
   Command,
   Database,
+  Download,
   Github,
   Globe2,
   Mail,
@@ -166,14 +167,16 @@ onBeforeUnmount(() => observer?.disconnect());
       </nav>
       <div class="luxury-header-right">
         <button class="locale-button" type="button" @click="toggleLocale" :aria-label="isVi ? 'Switch to English' : 'Chuyển sang tiếng Việt'"><span :class="{ active: isVi }">VI</span><i>/</i><span :class="{ active: !isVi }">EN</span></button>
-        <a class="header-mail" href="mailto:tranquangluong06@gmail.com">Let's talk <ArrowUpRight :size="15" /></a>
+        <a class="header-cv" href="/cv-tran-quang-luong.pdf" download="Tran-Quang-Luong-CV.pdf"><Download :size="14" />{{ isVi ? "Tải CV" : "Download CV" }}</a>
+        <a class="header-mail" href="mailto:tranquangluong06@gmail.com">{{ isVi ? "Liên hệ" : "Let's talk" }} <ArrowUpRight :size="15" /></a>
         <button class="luxury-menu-button" type="button" @click="mobileMenuOpen = !mobileMenuOpen" :aria-label="mobileMenuOpen ? 'Close menu' : 'Open menu'"><X v-if="mobileMenuOpen" :size="19" /><Menu v-else :size="19" /></button>
       </div>
     </header>
 
     <div v-if="mobileMenuOpen" class="luxury-mobile-menu">
       <a v-for="item in ui.nav" :key="item.id" :href="`#${item.id}`" @click.prevent="scrollTo(item.id)"><span>{{ item.label }}</span><ArrowUpRight :size="19" /></a>
-      <a href="mailto:tranquangluong06@gmail.com"><span>Let's talk</span><Mail :size="18" /></a>
+      <a href="/cv-tran-quang-luong.pdf" download="Tran-Quang-Luong-CV.pdf"><span>{{ isVi ? "Tải CV" : "Download CV" }}</span><Download :size="18" /></a>
+      <a href="mailto:tranquangluong06@gmail.com"><span>{{ isVi ? "Liên hệ" : "Let's talk" }}</span><Mail :size="18" /></a>
     </div>
 
     <section id="home" class="luxury-hero page-gutter">
@@ -190,7 +193,7 @@ onBeforeUnmount(() => observer?.disconnect());
         <div class="hero-visual-blue"></div>
         <div class="hero-image-wrap"><img :src="avatarImage" :alt="ui.portraitLabel" /></div>
         <div class="hero-portrait-caption"><span>{{ ui.portraitLabel }}</span><strong>{{ ui.portraitSub }}</strong></div>
-        <div class="hero-year">MMV / 2026</div>
+        <div class="hero-year">HCMC / 2026</div>
         <div class="hero-availability"><span class="availability-dot"></span>{{ ui.availability }}</div>
       </div>
       <div class="hero-footer-line"><span>{{ ui.heroNote }}</span><span>↓ SCROLL TO EXPLORE</span></div>
@@ -208,14 +211,14 @@ onBeforeUnmount(() => observer?.disconnect());
     <section id="work" class="editorial-section work-editorial page-gutter">
       <div class="editorial-label"><span>{{ ui.workKicker }}</span><span class="editorial-label-line"></span><span>03</span></div>
       <div class="work-heading"><h2 v-html="ui.workTitle.replace(/\n/g, '<br />')"></h2><p>{{ ui.workBody }}</p></div>
-      <article class="featured-work" @click="openProject(featuredProject)">
+      <article class="featured-work" role="button" tabindex="0" @click="openProject(featuredProject)" @keydown.enter.prevent="openProject(featuredProject)" @keydown.space.prevent="openProject(featuredProject)">
         <div class="featured-image"><img :src="featuredProject.image" :alt="featuredProject.title" loading="lazy" /><div class="featured-image-overlay"></div><span class="featured-image-number">01 / {{ projectCount }}</span><span class="featured-open"><MoveUpRight :size="22" /></span></div>
         <div class="featured-content"><div class="featured-kicker"><span>{{ ui.featured }}</span><span>{{ featuredProject.timeline }}</span></div><h3>{{ featuredProject.title }}</h3><p>{{ projectSummary(featuredProject) }}</p><div class="featured-facts"><span>{{ featuredProject.category }}</span><span>{{ featuredProject.status }}</span></div><p class="featured-evidence">{{ projectEvidence(featuredProject) }}</p><div class="project-tags"><span v-for="tech in featuredProject.technologies.slice(0, 5)" :key="tech">{{ tech }}</span></div><button type="button" class="case-study-link" @click.stop="openProject(featuredProject)">{{ ui.viewCase }} <ArrowUpRight :size="16" /></button></div>
       </article>
       <div class="archive-heading"><span>02—{{ projectCount }}</span><span>{{ isVi ? "Các dự án khác" : "More work" }}</span><span class="archive-line"></span></div>
       <div class="archive-tools"><span>{{ isVi ? "Lọc theo loại project" : "Filter by project type" }}</span><div class="project-filter"><button v-for="filter in filterOptions" :key="filter.key" type="button" :class="{ active: activeProjectFilter === filter.key }" @click="activeProjectFilter = filter.key">{{ filter.label }}</button></div></div>
       <div class="project-archive">
-        <article v-for="(project, index) in filteredProjects" :key="project.id" class="archive-row" @mouseenter="showPreview(project, $event)" @mousemove="movePreview" @mouseleave="hidePreview" @click="openProject(project)"><span class="archive-index">{{ projectNumber(project) }}</span><div class="archive-name"><h3>{{ project.title }}</h3><span>{{ project.category }} · {{ project.status }}</span></div><span class="archive-year">{{ project.timeline }}</span><span class="archive-arrow"><ArrowUpRight :size="18" /></span></article>
+        <article v-for="(project, index) in filteredProjects" :key="project.id" class="archive-row" role="button" tabindex="0" @mouseenter="showPreview(project, $event)" @mousemove="movePreview" @mouseleave="hidePreview" @click="openProject(project)" @keydown.enter.prevent="openProject(project)" @keydown.space.prevent="openProject(project)"><span class="archive-index">{{ projectNumber(project) }}</span><div class="archive-name"><h3>{{ project.title }}</h3><span>{{ project.category }} · {{ project.status }}</span></div><span class="archive-year">{{ project.timeline }}</span><span class="archive-arrow"><ArrowUpRight :size="18" /></span></article>
       </div>
       <div v-if="activeProject" class="work-preview" :style="{ left: `${previewX + 22}px`, top: `${previewY - 140}px` }"><img :src="activeProject.image" :alt="activeProject.title" /><span>{{ activeProject.title }}</span></div>
       <a class="archive-link" href="https://github.com/LuongNuong131" target="_blank" rel="noreferrer">{{ ui.archive }} <ArrowUpRight :size="16" /></a>

@@ -1,34 +1,23 @@
 {
   "name": "lunu-portfolio",
   "private": true,
-  "version": "1.0.0",
+  "version": "2.0.0",
   "type": "module",
+  "engines": {
+    "node": "24.x"
+  },
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "vite build && node scripts/prepare-static-pages.mjs",
     "preview": "vite preview"
   },
   "dependencies": {
     "@lucide/vue": "^1.16.0",
-    "@unhead/vue": "^1.8.10",
-    "@vueuse/core": "^10.9.0",
-    "gsap": "^3.15.0",
-    "lenis": "^1.3.23",
-    "lucide-vue-next": "^1.0.0",
-    "pinia": "^3.0.4",
-    "three": "^0.184.0",
-    "typed.js": "^3.0.0",
     "vue": "^3.5.34",
-    "vue-i18n": "^9.10.2",
     "vue-router": "^5.0.7"
   },
   "devDependencies": {
-    "@rolldown/binding-linux-x64-gnu": "^1.2.5",
     "@vitejs/plugin-vue": "^6.0.6",
-    "autoprefixer": "^10.5.0",
-    "lightningcss-linux-x64-gnu": "^1.33.0",
-    "postcss": "^8.5.15",
-    "tailwindcss": "^3.4.19",
     "vite": "^8.0.12"
   }
 }

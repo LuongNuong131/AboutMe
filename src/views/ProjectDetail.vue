@@ -1,62 +1,94 @@
 <script setup>
 import { computed } from "vue";
-import { useRoute, useRouter } from "vue-router";
-import { useI18n } from "vue-i18n";
-import { ArrowLeft, ArrowUpRight, Check, ExternalLink, Github, Layers3 } from "lucide-vue-next";
-import { projects } from "../data/projects";
+import { useRoute } from "vue-router";
+import { ArrowLeft, ArrowRight, ArrowUpRight, CodeXml } from "@lucide/vue";
+import ProjectCover from "../components/ProjectCover.vue";
+import { projects, projectGroups } from "../data/projects";
+import { publicAsset } from "../data/site";
+import { localize, t } from "../i18n";
 
 const route = useRoute();
-const router = useRouter();
-const { locale } = useI18n();
-const isVi = computed(() => locale.value === "vi");
-const project = computed(() => projects.find((item) => item.id === route.params.id));
-const projectIndex = computed(() => Math.max(1, projects.findIndex((item) => item.id === route.params.id) + 1));
-const projectTotal = String(projects.length).padStart(2, "0");
-const backLabel = computed(() => isVi.value ? "Quay lại work archive" : "Back to work archive");
-const roleLabel = computed(() => isVi.value ? "Vai trò" : "Role");
-const logicTitle = computed(() => isVi.value ? "Luồng nghiệp vụ chủ lực" : "Core business flows");
-const architectureTitle = computed(() => isVi.value ? "Kiến trúc hạ tầng" : "System architecture");
-const challengeTitle = computed(() => isVi.value ? "Bài toán đáng nhớ" : "The challenge");
-const solutionTitle = computed(() => isVi.value ? "Cách tôi xử lý" : "The approach");
-const projectOverview = computed(() => isVi.value ? project.value?.overview : project.value?.overviewEn || project.value?.overview);
-const projectEvidence = computed(() => isVi.value ? project.value?.evidence : project.value?.evidenceEn || project.value?.evidence);
-const goBack = () => router.push({ name: "home" });
+const projectIndex = computed(() => projects.findIndex(({ id }) => id === route.params.id));
+const project = computed(() => projects[projectIndex.value]);
+const nextProject = computed(() => projects[(projectIndex.value + 1) % projects.length]);
+
+const caseSections = [
+  { key: "challenge", vi: "Bài toán", en: "The challenge" },
+  { key: "approach", vi: "Cách triển khai", en: "The approach" },
+  { key: "architecture", vi: "Kiến trúc", en: "Architecture" },
+];
 </script>
 
 <template>
-  <main v-if="project" class="case-study-page">
-    <header class="case-study-header">
-      <button type="button" class="case-back" @click="goBack"><ArrowLeft :size="17" /><span>{{ backLabel }}</span></button>
-      <span class="case-brand">LQ / CASE STUDY</span>
-      <span class="case-count">{{ String(projectIndex).padStart(2, "0") }} / {{ projectTotal }}</span>
+  <main v-if="project" id="main-content" class="case-page wrap" tabindex="-1">
+    <RouterLink class="back-link" :to="{ name: 'home', hash: '#work' }">
+      <ArrowLeft :size="17" aria-hidden="true" /> {{ t("Tất cả dự án", "All projects") }}
+    </RouterLink>
+
+    <header class="case-heading">
+      <div>
+        <p class="project-group">{{ localize(projectGroups[project.group]) }}</p>
+        <h1>{{ project.title }}</h1>
+        <p class="case-name">{{ localize(project.name) }}</p>
+      </div>
+      <p class="case-summary">{{ localize(project.summary) }}</p>
     </header>
 
-    <section class="case-hero">
-      <img :src="project.image" :alt="project.title" class="case-hero-image" />
-      <div class="case-hero-overlay"></div>
-      <div class="case-hero-top"><span>{{ project.timeline }}</span><span>{{ project.category }} · {{ project.status }}</span></div>
-      <div class="case-hero-content"><span class="case-eyebrow">Selected work / {{ projectIndex.toString().padStart(2, '0') }}</span><h1>{{ project.title }}</h1><p>{{ project.tagline }}</p></div>
-      <div class="case-hero-bottom"><span>Trần Quang Lương</span><span>Backend · Systems · Product</span></div>
-    </section>
+    <div class="case-meta">
+      <ul class="tech-list" :aria-label="t('Công nghệ', 'Technologies')">
+        <li v-for="technology in project.technologies" :key="technology">{{ technology }}</li>
+      </ul>
+      <div v-if="project.live || project.source || project.links" class="case-links">
+        <a v-if="project.live" :href="project.live" target="_blank" rel="noopener">
+          {{ project.access === "private" ? t("Trang đăng nhập", "Sign-in page") : t("Mở website", "Visit website") }}
+          <ArrowUpRight :size="16" aria-hidden="true" />
+        </a>
+        <a v-if="project.source" :href="project.source" target="_blank" rel="noopener">
+          <CodeXml :size="16" aria-hidden="true" /> {{ t("Mã nguồn", "Source code") }}
+        </a>
+        <a v-for="link in project.links" :key="link.url" :href="link.url" target="_blank" rel="noopener">
+          {{ localize(link.label) }} <ArrowUpRight :size="16" aria-hidden="true" />
+        </a>
+      </div>
+    </div>
 
-    <section class="case-intro case-gutter">
-      <div class="case-section-label"><span>01</span><i></i><span>{{ isVi ? "Tổng quan" : "Overview" }}</span></div>
-      <div class="case-intro-grid"><div><h2>{{ projectOverview }}</h2><p class="case-evidence">{{ projectEvidence }}</p></div><div class="case-intro-side"><div><span>{{ roleLabel }}</span><strong>{{ project.role[locale] || project.role.vi }}</strong></div><div><span>{{ isVi ? "Thời gian" : "Timeline" }}</span><strong>{{ project.timeline }}</strong></div><div><span>{{ isVi ? "Phân loại" : "Category" }}</span><strong>{{ project.category }}</strong></div><a v-if="project.links?.[0]?.url && project.links[0].url !== '#'" :href="project.links[0].url" target="_blank" rel="noreferrer">{{ project.links[0].label }} <ArrowUpRight :size="16" /></a></div></div>
-    </section>
+    <ProjectCover v-if="project.cover" :project="project" sizes="(max-width: 1370px) 90vw, 1160px" :lazy="false" />
 
-    <section class="case-dark-section case-gutter">
-      <div class="case-section-label case-section-label--light"><span>02</span><i></i><span>{{ logicTitle }}</span></div>
-      <div class="logic-grid"><article v-for="(item, index) in project.business_logic" :key="item" class="logic-item"><span>0{{ index + 1 }}</span><p>{{ item }}</p><Check :size="17" /></article></div>
-    </section>
+    <div class="case-story">
+      <section v-if="project.role" class="case-story-row">
+        <h2>{{ t("Vai trò", "Role") }}</h2>
+        <p>{{ localize(project.role) }}</p>
+      </section>
+      <section v-for="section in caseSections" :key="section.key" class="case-story-row">
+        <h2>{{ t(section.vi, section.en) }}</h2>
+        <p>{{ localize(project[section.key]) }}</p>
+      </section>
+    </div>
 
-    <section class="case-architecture case-gutter">
-      <div class="case-section-label"><span>03</span><i></i><span>{{ architectureTitle }}</span></div>
-      <div class="architecture-grid"><div><h2>{{ project.architecture }}</h2><div class="tech-stack"><span v-for="tech in project.technologies" :key="tech">{{ tech }}</span></div></div><div class="architecture-art"><Layers3 :size="45" stroke-width="1" /><span>ARCH / {{ projectIndex.toString().padStart(2, '0') }}</span></div></div>
-    </section>
+    <figure v-for="image in project.gallery" :key="image.file" class="case-gallery" :class="{ 'case-gallery-mobile': image.width < image.height }">
+      <img
+        :src="publicAsset('projects/' + image.file + '.webp')"
+        :width="image.width"
+        :height="image.height"
+        :alt="localize(image.alt)"
+        loading="lazy"
+        decoding="async"
+      />
+      <figcaption>{{ localize(image.alt) }}</figcaption>
+    </figure>
 
-    <section class="case-challenge case-gutter"><div class="challenge-card"><span>04 / {{ challengeTitle }}</span><h2>{{ project.challenges }}</h2></div><div class="solution-card"><span>05 / {{ solutionTitle }}</span><h2>{{ project.solutions }}</h2></div></section>
-
-    <footer class="case-footer case-gutter"><button type="button" class="case-back" @click="goBack"><ArrowLeft :size="17" /><span>{{ backLabel }}</span></button><a v-if="project.links?.[0]?.url && project.links[0].url !== '#'" :href="project.links[0].url" target="_blank" rel="noreferrer">Open repository <Github :size="16" /></a><span>© 2026 / LQ</span></footer>
+    <RouterLink class="next-project" :to="{ name: 'project-detail', params: { id: nextProject.id } }">
+      <span><span>{{ t("Dự án kế tiếp", "Next project") }}</span><strong>{{ nextProject.title }}</strong></span>
+      <ArrowRight :size="32" aria-hidden="true" />
+    </RouterLink>
   </main>
-  <main v-else class="case-not-found"><h1>Project not found.</h1><button type="button" @click="goBack">Back home <ExternalLink :size="16" /></button></main>
+
+  <main v-else id="main-content" class="case-page not-found wrap" tabindex="-1">
+    <p class="project-group">404</p>
+    <h1>{{ t("Không tìm thấy trang", "Page not found") }}</h1>
+    <p>{{ t("Bạn có thể quay lại danh sách để chọn một dự án khác.", "Return to the portfolio to explore the other projects.") }}</p>
+    <RouterLink class="button button-primary" :to="{ name: 'home', hash: '#work' }">
+      <ArrowLeft :size="17" aria-hidden="true" /> {{ t("Xem các dự án", "Explore projects") }}
+    </RouterLink>
+  </main>
 </template>

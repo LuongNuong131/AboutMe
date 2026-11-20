@@ -1,47 +1,24 @@
-import { createI18n } from "vue-i18n";
+import { ref, watch } from "vue";
 
-const messages = {
-  en: {
-    nav: {
-      contact: "Contact",
-      available: "Available",
-      scroll: "Scroll to explore",
-    },
-    hero: {
-      role: "Full-Stack Developer · System Engineer",
-      desc: "Software Engineer specializing in optimizing Core Backend, Database, and high-load system architectures.",
-      explore: "Explore Projects",
-      profile: "Dev Profile",
-      opentowork: "Open to work",
-    },
-    project: {
-      title: "Case Studies",
-      subtitle: "Real Projects",
-    },
-  },
-  vi: {
-    nav: {
-      contact: "Liên hệ",
-      available: "Sẵn sàng",
-      scroll: "Cuộn để khám phá",
-    },
-    hero: {
-      role: "Full-Stack Developer · Kỹ Sư Hệ Thống",
-      desc: "Kỹ sư phần mềm chuyên tối ưu hóa Core Backend, Database, và kiến trúc hệ thống chịu tải cao.",
-      explore: "Khám Phá Dự Án",
-      profile: "Hồ Sơ Năng Lực",
-      opentowork: "Sẵn sàng làm việc",
-    },
-    project: {
-      title: "Dự Án Nổi Bật",
-      subtitle: "Thực Chiến",
-    },
-  },
-};
+const preferenceKey = "portfolio-language";
 
-export const i18n = createI18n({
-  legacy: false,
-  locale: "vi",
-  fallbackLocale: "en",
-  messages,
-});
+function readLocale() {
+  try {
+    return localStorage.getItem(preferenceKey) === "en" ? "en" : "vi";
+  } catch {
+    return "vi";
+  }
+}
+
+export const locale = ref(readLocale());
+export const t = (vi, en) => locale.value === "vi" ? vi : en;
+export const localize = (content) => content[locale.value];
+
+watch(locale, (value) => {
+  document.documentElement.lang = value;
+  try {
+    localStorage.setItem(preferenceKey, value);
+  } catch {
+    // Language switching still works without browser storage.
+  }
+}, { immediate: true });

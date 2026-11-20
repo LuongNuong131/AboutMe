@@ -35,20 +35,31 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     permissions:
+      actions: read
       pages: write
       id-token: write
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - name: Select GitHub Actions as the Pages source
+      - name: Wait for the branch-based Pages deployment
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          site="repos/$GITHUB_REPOSITORY/pages"
-          if [ "$(gh api "$site" --jq .build_type)" = legacy ]; then
-            gh api --method PUT "$site" -f build_type=workflow --silent ||
-              echo "::warning::Pages source could not be changed. Select GitHub Actions in the repository's Pages settings."
-          fi
+          repo="repos/$GITHUB_REPOSITORY"
+          source="$(gh api "$repo/pages" --jq .build_type)"
+          [ "$source" = legacy ] || exit 0
+
+          # Branch publishing can otherwise replace the Vite artifact with the source files.
+          for attempt in {1..5}; do
+            run_id="$(gh api --method GET "$repo/actions/runs" \
+              -f head_sha="$GITHUB_SHA" -f event=dynamic \
+              --jq '[.workflow_runs[] | select(.path == "dynamic/pages/pages-build-deployment")][0].id // empty')"
+            if [ -n "$run_id" ]; then
+              timeout 180 gh run watch "$run_id" --repo "$GITHUB_REPOSITORY" --interval 5
+              break
+            fi
+            sleep 4
+          done
       - uses: actions/deploy-pages@v4
         id: deployment

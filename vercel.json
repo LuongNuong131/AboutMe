@@ -5,5 +5,13 @@
   "installCommand": "npm ci",
   "outputDirectory": "dist",
   "cleanUrls": true,
-  "trailingSlash": false
+  "trailingSlash": false,
+  "headers": [
+    {
+      "source": "/cv-tran-quang-luong.pdf",
+      "headers": [
+        { "key": "Content-Disposition", "value": "inline; filename=\"Tran-Quang-Luong-CV.pdf\"" }
+      ]
+    }
+  ]
 }

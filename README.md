@@ -14,7 +14,7 @@ Portfolio của Trần Quang Lương, Full-Stack Developer tại TP. Hồ Chí M
 | **FCDBB** | Lịch sân, điểm danh GPS, đội hình A/B, bảng xếp hạng và quỹ đội bóng. | [Case study](https://lunuportfolio.vercel.app/project/fcdbb) · [GitHub](https://github.com/LuongNuong131/LuNu_FCDBB) |
 | **LuNu Music** | Thư viện nghe nhạc, hàng đợi, lyrics, playlist và phòng xem video. | [Case study](https://lunuportfolio.vercel.app/project/lunu-music) · [GitHub](https://github.com/LuongNuong131/LuNu_Music) |
 
-Portfolio dùng Vue 3, Vue Router và Vite, có giao diện tiếng Việt và tiếng Anh. Bản build tạo HTML riêng cho từng đường dẫn dự án để hỗ trợ tải lại trang và hiển thị thông tin khi chia sẻ liên kết.
+Portfolio dùng Vue 3, Vue Router và Vite, có giao diện tiếng Việt và tiếng Anh. Khung trình diễn cho phép chuyển giữa ba dự án tiêu biểu bằng chuột, cảm ứng hoặc phím mũi tên. Bản build tạo HTML riêng cho từng đường dẫn dự án để hỗ trợ tải lại trang và hiển thị thông tin khi chia sẻ liên kết.
 
 ## Chạy local
 
@@ -44,8 +44,9 @@ npm run preview
 | Ảnh đại diện | [src/assets/AnhThe.webp](src/assets/AnhThe.webp) |
 | CV | [public/cv-tran-quang-luong.pdf](public/cv-tran-quang-luong.pdf) |
 | Ảnh dự án | [public/projects](public/projects/) |
+| Ảnh nền trang chủ và khung trình diễn | [public/art](public/art/) |
 
-Để thay ảnh đại diện, thay `src/assets/AnhThe.webp` bằng ảnh WebP mới. Nếu đổi tỷ lệ ảnh, cập nhật `width` và `height` của ảnh trong `HomeView.vue`. Ảnh AF_Booking và FCDBB lấy từ tài liệu dự án. Ảnh LuNu Music chụp từ màn hình đăng nhập công khai.
+Để thay ảnh đại diện, thay `src/assets/AnhThe.webp` bằng ảnh WebP mới. Nếu đổi tỷ lệ ảnh, cập nhật `width` và `height` trong [HeroSection.vue](src/components/HeroSection.vue). Ảnh AF_Booking và FCDBB lấy từ tài liệu dự án. Ảnh LuNu Music chụp từ màn hình đăng nhập công khai.
 
 ## Production
 

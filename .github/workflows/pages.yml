@@ -41,5 +41,14 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
+      - name: Select GitHub Actions as the Pages source
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          site="repos/$GITHUB_REPOSITORY/pages"
+          if [ "$(gh api "$site" --jq .build_type)" = legacy ]; then
+            gh api --method PUT "$site" -f build_type=workflow --silent ||
+              echo "::warning::Pages source could not be changed. Select GitHub Actions in the repository's Pages settings."
+          fi
       - uses: actions/deploy-pages@v4
         id: deployment
